@@ -1,17 +1,11 @@
-import React, { useContext, useEffect } from 'react';
 import { Refresh, Search } from '@mui/icons-material'
 import { AppBar, Button, Grid, IconButton, Paper, TextField, Toolbar, Tooltip, Typography } from '@mui/material'
 import Head from 'next/head'
 import Image from 'next/image'
-import Layout from '../components/website/Layout'
-import styles from '../styles/Home.module.css'
-import { Store } from '../utils/Store';
+import Layout from '../../components/dashboard/Layout'
+import styles from '../../styles/Home.module.css'
 
 const Home = () => {
-  const { dispatch } = useContext(Store);
-  useEffect(() => {
-    dispatch({ type: 'HERO_IMAGE_ON'});
-  }, []);
   return (
     <Layout>
       <Paper sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }}>
