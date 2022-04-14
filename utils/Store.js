@@ -17,7 +17,7 @@ const initialState = {
       ? JSON.parse(Cookies.get('location'))
       : {},
     paymentMethod: Cookies.get('paymentMethod')
-      ? Cookies.get('paymentMethod')
+      ? JSON.parse(Cookies.get('paymentMethod'))
       : {},
   },
   userInfo: Cookies.get('userInfo')
@@ -60,6 +60,7 @@ function reducer(state, action) {
           )
         : [...state.cart.cartItems, newItem];
       Cookies.set('cartItems', JSON.stringify(cartItems), { expires: 365 });
+      Cookies.set('cartIsEmpty', false);
       return {
         ...state,
         cart: {
@@ -68,6 +69,18 @@ function reducer(state, action) {
         },
       };
     }
+    case 'CART_IS_EMPTY' : {
+      Cookies.set('cartIsEmpty', true);
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          cartIsEmpty: true
+        }
+
+      }
+    }
+
     case 'CART_REMOVE_ITEM': {
       const cartItems = state.cart.cartItems.filter(
         (item) => item._id !== action.payload._id
@@ -118,9 +131,10 @@ function reducer(state, action) {
         },
       };
 
-    case 'CLEAR_CART':
-      return { ...state, cart: { ...state.cart, cartItems: [] } };
-
+    case 'CLEAR_CART':{
+      Cookies.set('cartIsEmpty', true);
+      return { ...state, cart: { ...state.cart, cartIsEmpty: true, cartItems: [] } };
+    }
     default:
       return state;
   }

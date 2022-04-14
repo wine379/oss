@@ -6,14 +6,17 @@ import Container from '@mui/material/Container';
 import Typography from './Typography';
 import TextField from './TextField';
 import Image from 'next/image';
+import useStyles from '../../utils/website/styles';
 
 const Copyright = () => {
   return (
     <React.Fragment>
-      {'© '}
-      <Link color='inherit' href='https://mui.com/'>
-        Your Website
-      </Link>{' '}
+      <br />
+      {'© '} &nbsp;
+      <Link color='inherit' href='https://lcc.mw/'>
+        Lilongwe City Assembly
+      </Link>
+      &nbsp;
       {new Date().getFullYear()}
     </React.Fragment>
   );
@@ -44,105 +47,161 @@ const LANGUAGES = [
 ];
 
 const AppFooter = () => {
+  const classes = useStyles();
   return (
+    // <footer>
+    //   <br />
+    //   <Box sx={{ display: 'flex', bgcolor: 'secondary.main' }}>
+    //     <Container maxWidth='lg'>
+    // <Grid container spacing={5}>
+    //   <Grid item xs={12} md={4}>
+    //     <Box borderBottom={1}>Help</Box>
+    //     <Box>
+    //       <Link href='/' color='inherit'>
+    //         Contact
+    //       </Link>
+    //     </Box>
+    //     <Box>
+    //       <Link href='/' color='inherit'>
+    //         Support
+    //       </Link>
+    //     </Box>
+    //     <Box>
+    //       <Link href='/' color='inherit'>
+    //         Privacy
+    //       </Link>
+    //     </Box>
+    //   </Grid>
+    //   <Grid item xs={12} md={4}>
+    //     <Box borderBottom={1}>Partniers</Box>
+    //     <Box>
+    //       <Link href='https://lwb.mw' color='inherit'>
+    //         Lilongwe Water Board
+    //       </Link>
+    //     </Box>
+    //     <Box>
+    //       <Link href='https://lcc.mw' color='inherit'>
+    //         Lilongwe City Assembly
+    //       </Link>
+    //     </Box>
+    //     <Box>
+    //       <Link href='/' color='inherit'>
+    //         Italy
+    //       </Link>
+    //     </Box>
+    //   </Grid>
+    //   <Grid item xs={12} md={4}>
+    //     <Box borderBottom={1}>Resources</Box>
+    //     <Box>
+    //       <Link href='/' color='inherit'>
+    //         Download product catalogue
+    //       </Link>
+    //     </Box>
+    //     <Box>
+    //       <Link href='/' color='inherit'>
+    //         Download project leaflet
+    //       </Link>
+    //     </Box>
+    //     <Box>
+    //       <Link href='/' color='inherit'>
+    //         Download project progress report
+    //       </Link>
+    //     </Box>
+    //   </Grid>
+    // </Grid>
+    // <Grid
+    //   style={{
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //   }}
+    // >
+    //   <p></p>
+    //   <Copyright style='white-space: pre-line' />{' '}
+    // </Grid>
+    //     </Container>
+    //   </Box>
+    // </footer>
+
     <Typography
       component='footer'
-      sx={{ display: 'flex', bgcolor: 'secondary.light' }}
+      px={{ xs: 3, sm: 10 }}
+      py={{ xs: 5, sm: 10 }}
+      sx={{ display: 'flex', bgcolor: 'secondary.main', color: 'primary.dark' }}
     >
       <Container sx={{ my: 8, display: 'flex' }}>
         <Grid container spacing={5}>
-          <Grid item xs={6} sm={4} md={3}>
-            <Grid
-              container
-              direction='column'
-              justifyContent='flex-end'
-              spacing={2}
-              sx={{ height: 120 }}
-            >
-              <Grid item sx={{ display: 'flex' }}>
-                <Box component='a' href='https://mui.com/' sx={iconStyle}>
-                  <img
-                    src='/static/themes/onepirate/appFooterFacebook.png'
-                    alt='Facebook'
-                  />
-                </Box>
-                <Box
-                  component='a'
-                  href='https://twitter.com/MUI_hq'
-                  sx={iconStyle}
-                >
-                  <img
-                    src='/static/themes/onepirate/appFooterTwitter.png'
-                    alt='Twitter'
-                  />
-                </Box>
-              </Grid>
-              <Grid item>
-                <Copyright />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={6} sm={4} md={2}>
-            <Typography variant='h6' marked='left' gutterBottom>
-              Legal
-            </Typography>
-            <Box component='ul' sx={{ m: 0, listStyle: 'none', p: 0 }}>
-              <Box component='li' sx={{ py: 0.5 }}>
-                <Link href='/premium-themes/onepirate/terms/'>Terms</Link>
-              </Box>
-              <Box component='li' sx={{ py: 0.5 }}>
-                <Link href='/premium-themes/onepirate/privacy/'>Privacy</Link>
-              </Box>
+          <Grid item xs={12} md={4}>
+            <Box borderBottom={1}>Help</Box>
+            <Box>
+              <Link href='/' color='inherit'>
+                Contact us
+              </Link>
+            </Box>
+            <Box>
+              <Link href='/' color='inherit'>
+                Support
+              </Link>
+            </Box>
+            <Box>
+              <Link href='/' color='inherit'>
+                Privacy
+              </Link>
             </Box>
           </Grid>
-          <Grid item xs={6} sm={8} md={4}>
-            <Typography variant='h6' marked='left' gutterBottom>
-              Language
-            </Typography>
-            <TextField
-              select
-              size='medium'
-              variant='standard'
-              SelectProps={{
-                native: true,
-              }}
-              sx={{ mt: 1, width: 150 }}
-            >
-              {LANGUAGES.map((language) => (
-                <option value={language.code} key={language.code}>
-                  {language.name}
-                </option>
-              ))}
-            </TextField>
+          <Grid item xs={12} md={4}>
+            <Box borderBottom={1}>Partniers</Box>
+            <Box>
+              <Link href='https://www.lwb.mw' color='inherit'>
+                Lilongwe Water Board
+              </Link>
+            </Box>
+            <Box>
+              <Link href='https://lcc.mw' color='inherit'>
+                Lilongwe City Assembly
+              </Link>
+            </Box>
+            <Box>
+              <Link href='/' color='inherit'>
+                Italy
+              </Link>
+            </Box>
           </Grid>
-          <Grid item>
-            <Typography variant='caption'>
-              {'Icons made by '}
-              <Link
-                href='https://www.freepik.com'
-                rel='sponsored'
-                title='Freepik'
-              >
-                Freepik
+          <Grid item xs={12} md={4}>
+            <Box borderBottom={1}>Resources</Box>
+            <Box>
+              <Link href='/' color='inherit'>
+                Download product catalogue
               </Link>
-              {' from '}
-              <Link
-                href='https://www.flaticon.com'
-                rel='sponsored'
-                title='Flaticon'
-              >
-                www.flaticon.com
+            </Box>
+            <Box>
+              <Link href='/' color='inherit'>
+                Download project leaflet
               </Link>
-              {' is licensed by '}
-              <Link
-                href='https://creativecommons.org/licenses/by/3.0/'
-                title='Creative Commons BY 3.0'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                CC 3.0 BY
+            </Box>
+            <Box>
+              <Link href='/' color='inherit'>
+                Download project progress report
               </Link>
-            </Typography>
+            </Box>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Box
+              textAlign='center'
+              pt={{ xs: 2, sm: 5 }}
+            >
+              <Copyright />
+            </Box>
           </Grid>
         </Grid>
       </Container>

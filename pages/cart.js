@@ -58,7 +58,9 @@ const CartScreen = () => {
         <div>
           Cart is empty.{' '}
           <NextLink href='/products' passHref>
-            <Link>Continue Shopping</Link>
+            <Link>
+              <strong>Continue Shopping</strong>
+            </Link>
           </NextLink>{' '}
         </div>
       ) : (

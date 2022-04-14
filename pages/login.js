@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
 import {
   Button,
@@ -18,6 +18,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
 const Login = () => {
+  useEffect(() => {
+    dispatch({ type: 'HERO_IMAGE_OFF' });
+  }, []);
   const {
     handleSubmit,
     control,
@@ -41,8 +44,6 @@ const Login = () => {
         email,
         password,
       });
-
-      console.log(data);
 
       dispatch({ type: 'USER_LOGIN', payload: data });
       Cookies.set('userInfo', JSON.stringify(data));

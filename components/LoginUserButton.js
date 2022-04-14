@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import useRouter from 'next/router';
 import { Store } from '../utils/Store';
 import useStyle from '../utils/website/styles';
+import { Typography } from '@mui/material';
 
 export default function LoginUserButton() {
   const { state, dispatch } = useContext(Store);
@@ -26,12 +27,14 @@ export default function LoginUserButton() {
     }
   };
 
+  const userEmail = userInfo.email;
+
   return (
     <PopupState variant='popover' popupId='demo-popup-menu'>
       {(popupState) => (
         <>
           <Button className={classes.navbarButton} {...bindTrigger(popupState)}>
-            {userInfo.name}
+            <Typography color={'secondary'}>{userEmail}</Typography>
           </Button>
           <Menu {...bindMenu(popupState)}>
             <MenuItem

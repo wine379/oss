@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Refresh, Search } from '@mui/icons-material';
 import {
   AppBar,
@@ -26,12 +26,21 @@ import useStyle from '../utils/website/styles';
 import styles from '../styles/Home.module.css';
 import {Store} from '../utils/Store';
 import Cookies from 'js-cookie';
+import BasicDatePicker from '../components/BasicDataPicker';
 
 
 const Registration = () => {
+  let eighteenYearsAgo = new Date();
+  eighteenYearsAgo = eighteenYearsAgo.setFullYear(
+    eighteenYearsAgo.getFullYear() - 18
+  );
   const classes = useStyle();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {dispatch} = useContext(Store);
+
+  useEffect(() => {
+    dispatch({ type: 'HERO_IMAGE_OFF' });
+  }, []);
 
 
   const {
@@ -46,6 +55,7 @@ const Registration = () => {
   const submitHandler = async ({
     firstName,
     lastName,
+    dateOfBirth,
     phone,
     houseHoldName,
     email,
@@ -62,6 +72,7 @@ const Registration = () => {
       const { data } = await axios.post('/api/users/register', {
         firstName,
         lastName,
+        dateOfBirth,
         phone,
         houseHoldName,
         email,
@@ -143,6 +154,31 @@ const Registration = () => {
                 )}
               />
             </ListItem>
+            <ListItem>
+              <Controller
+                name='dateOfBirth'
+                control={control}
+                fullWidth
+                defaultValue=''
+                rules={{
+                  required: true,
+                }}
+                render={({ field }) => (
+                  <BasicDatePicker
+                    id='dateOfBirth'
+                    label='Date of birth'
+                    variant='outlined'
+                    inputProps={{ type: 'text' }}
+                    error={Boolean(errors.dateOfBirth)}
+                    helperText={
+                      errors.dateOfBirth ? 'Last name is required' : ''
+                    }
+                    {...field}
+                  />
+                )}
+              />
+            </ListItem>
+
             <ListItem>
               <Controller
                 name='phone'

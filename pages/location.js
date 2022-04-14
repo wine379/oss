@@ -41,27 +41,32 @@ const Location = (props) => {
   const { state, dispatch } = useContext(Store);
   const {
     userInfo,
-    cart: { location },
+    cart: { location, householdDetails },
   } = state;
   const router = useRouter();
   useEffect(() => {
     if (!userInfo) {
       router.push('/login?redirect=/location');
     }
+    if (!householdDetails) {
+      router.push('/household');
+    }
     setValue('ward', location.ward);
     setValue('area', location.area);
+    setValue('blockName', location.blockName);
     setValue('structureLocationZone', location.structureLocationZone);
+    
   }, []);
 
   const classes = useStyles();
-  const submitHandler = ({ward, area, structureLocationZone }) => {
+  const submitHandler = ({ward, area, blockName, structureLocationZone }) => {
     dispatch({
       type: 'SAVE_LOCATION',
-      payload: { ward, area, structureLocationZone },
+      payload: { ward, area, blockName, structureLocationZone },
     });
     Cookies.set(
       'location',
-      JSON.stringify({ ward, area, structureLocationZone })
+      JSON.stringify({ ward, area, blockName, structureLocationZone })
     );
     router.push('/payment');
   };
@@ -69,10 +74,11 @@ const Location = (props) => {
 
   return (
     <Layout title='Location details'>
+      <div className={classes.checkoutWizard}></div>
       <CheckoutWizard activeStep={2} />
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography component='h1' variant='h4'>
-          Location details
+          Location details for the new proposed toilet
         </Typography>
         <List>
           <ListItem>
@@ -135,6 +141,28 @@ const Location = (props) => {
           </ListItem>
           <ListItem>
             <Controller
+              name='blockName'
+              control={control}
+              defaultValue=''
+              rules={{
+                required: true,
+              }}
+              render={({ field }) => (
+                <TextField
+                  id='blockName'
+                  label='Block name eg: Senti'
+                  variant='outlined'
+                  inputProps={{ type: 'text' }}
+                  fullWidth
+                  error={Boolean(errors.blockName)}
+                  helperText={errors.blockName && 'Block name is required'}
+                  {...field}
+                />
+              )}
+            />
+          </ListItem>
+          <ListItem>
+            <Controller
               name='structureLocationZone'
               control={control}
               defaultValue=''
@@ -173,7 +201,7 @@ const Location = (props) => {
               Continue
             </Button>
           </ListItem>
-           <ListItem>
+          <ListItem>
             <Button
               type='button'
               variant='contained'

@@ -22,30 +22,6 @@ const HouseholdSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    email: {
-      type: String,
-      required: true,
-    },
-    headName: {
-      type: String,
-      required: true,
-    },
-    headNatioalID: {
-      type: String,
-      required: true,
-    },
-    phone: {
-      type: String,
-      required: true,
-    },
-    headPhone: {
-      type: String,
-      required: true,
-    },
-    headDateOfBirth: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,

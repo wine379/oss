@@ -17,6 +17,16 @@ const Household = () => {
   } = useForm();
 
   const { state, dispatch } = useContext(Store);
+  const mainSourcesOfLiving = [
+    'Begging',
+    'Ganyu',
+    'Petty Trading',
+    'Formal Employment',
+    'Informal Employment',
+    'Remittances',
+    'Pension',
+    'Subsistence Farming'
+  ]
   const {
     userInfo,
     cart: { householdDetails },
@@ -26,36 +36,39 @@ const Household = () => {
     if (!userInfo) {
       router.push('/login?redirect=/household');
     }
-    setValue('householdName', householdDetails.householdName);
+    setValue('name', householdDetails.name);
     setValue('plotNumber', householdDetails.plotNumber);
     setValue('homeOwnershipStatus', householdDetails.homeOwnershipStatus);
-    setValue('latrine', householdDetails.latrine);
+    setValue('currentLatrineType', householdDetails.currentLatrineType);
     setValue(
       'avarageMonthlyIncomeRange',
       householdDetails.avarageMonthlyIncomeRange
     );
+    setValue('mainSourceOfLiving', householdDetails.mainSourceOfLiving);
     setValue('isPoor', householdDetails.isPoor);
     setValue('isVulnerable', householdDetails.isVulnerable);
   }, []);
 
   const classes = useStyles();
   const submitHandler = ({
-    householdName,
+    name,
     plotNumber,
     homeOwnershipStatus,
-    latrine,
+    currentLatrineType,
     avarageMonthlyIncomeRange,
+    mainSourceOfLiving,
     isPoor,
     isVulnerable,
   }) => {
     dispatch({
       type: 'SAVE_HOUSEHOLD_DETAILS',
       payload: {
-        householdName,
+        name,
         plotNumber,
         homeOwnershipStatus,
-        latrine,
+        currentLatrineType,
         avarageMonthlyIncomeRange,
+        mainSourceOfLiving,
         isPoor,
         isVulnerable
       },
@@ -63,11 +76,12 @@ const Household = () => {
     Cookies.set(
       'householdDetails',
       JSON.stringify({
-        householdName,
+        name,
         plotNumber,
         homeOwnershipStatus,
-        latrine,
+        currentLatrineType,
         avarageMonthlyIncomeRange,
+        mainSourceOfLiving,
         isPoor,
         isVulnerable,
     })
@@ -77,6 +91,7 @@ const Household = () => {
 
   return (
     <Layout title='Household details'>
+      <div className={classes.checkoutWizard}></div>
       <CheckoutWizard activeStep={1} />
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography component='h1' variant='h4'>
@@ -85,7 +100,7 @@ const Household = () => {
         <List>
           <ListItem>
             <Controller
-              name='householdName'
+              name='name'
               control={control}
               defaultValue=''
               rules={{
@@ -94,15 +109,15 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='householdName'
+                  id='name'
                   label='Household name (eg. The Bandas)'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
-                  error={Boolean(errors.householdName)}
+                  error={Boolean(errors.name)}
                   helperText={
-                    errors.householdName
-                      ? errors.householdName.type === 'minLength'
+                    errors.name
+                      ? errors.name.type === 'minLength'
                         ? 'Household name should have at least 3 characters'
                         : 'Household name is required'
                       : ''
@@ -181,7 +196,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='latrine'
+              name='currentLatrineType'
               control={control}
               defaultValue=''
               rules={{
@@ -189,30 +204,30 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='latrine'
+                  id='currentLatrineType'
                   label='Select current household latrine type'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.latrine)}
+                  error={Boolean(errors.currentLatrineType)}
                   helperText={
-                    errors.latrine &&
-                    'Current household latrine type is required'
+                    errors.currentLatrineType &&
+                    'Current household currentLatrineType type is required'
                   }
                   {...field}
                 >
-                  <MenuItem value='No Latrine'>No Latrine</MenuItem>
+                  <MenuItem value='No latrine'>No latrine</MenuItem>
                   <MenuItem value='Flush Toilet'>Flush Toilet</MenuItem>
-                  <MenuItem value='VIP Latrine'>VIP Latrine</MenuItem>
+                  <MenuItem value='VIP latrine'>VIP latrine</MenuItem>
                   <MenuItem value='Latrine with Roof'>
                     Latrine with Roof
                   </MenuItem>
                   <MenuItem value='Latrine Without Roof'>
                     Latrine Without Roof
                   </MenuItem>
-                  <MenuItem value='Shared Latrine with neighbors'>
-                    Shared Latrine with neighbors
+                  <MenuItem value='Shared latrine with neighbors'>
+                    Shared latrine with neighbors
                   </MenuItem>
                 </TextField>
               )}
@@ -274,6 +289,41 @@ const Household = () => {
                 >
                   <MenuItem value='Yes'>YES</MenuItem>
                   <MenuItem value='No'>NO</MenuItem>
+                </TextField>
+              )}
+            />
+          </ListItem>
+          <ListItem>
+            <Controller
+              name='mainSourceOfLiving'
+              control={control}
+              defaultValue=''
+              rules={{
+                required: true,
+              }}
+              render={({ field }) => (
+                <TextField
+                  id='mainSourceOfLiving'
+                  label='Select main source of living'
+                  variant='outlined'
+                  inputProps={{ type: 'text' }}
+                  fullWidth
+                  select
+                  error={Boolean(errors.mainSourceOfLiving)}
+                  helperText={
+                    errors.mainSourceOfLiving &&
+                    'Structure Location Zone is required'
+                  }
+                  {...field}
+                >
+                  {mainSourcesOfLiving.map((mainSourceOfLiving) => (
+                    <MenuItem
+                      key={mainSourceOfLiving}
+                      value={mainSourceOfLiving}
+                    >
+                      {mainSourceOfLiving}
+                    </MenuItem>
+                  ))}
                 </TextField>
               )}
             />

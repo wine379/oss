@@ -4,7 +4,7 @@ import Link from '@mui/material/Link';
 import AppBar from './AppBar';
 import Cookies from 'js-cookie';
 import Toolbar from './Toolbar';
-import { Badge, Switch } from '@mui/material';
+import { Badge, List, ListItem, Switch, Typography } from '@mui/material';
 import NextLink from 'next/link';
 import LoginUserButton from '../LoginUserButton';
 import { Store } from '../../utils/Store';
@@ -48,34 +48,35 @@ const AppAppBar = () => {
           </Link>
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <div className={classes.grow}></div>
-            <div>
-              <Switch
-                checked={darkMode}
-                onChange={darkModeChangeHandler}
-                color='secondary'
-              ></Switch>
-              <NextLink href='/cart' passHref>
-                <Link>
-                  {cart.cartItems.length > 0 ? (
-                    <Badge
-                      badgeContent={cart.cartItems.length}
-                      color='secondary'
-                    >
-                      Cart
-                    </Badge>
-                  ) : (
-                    'Cart'
-                  )}
-                </Link>
-              </NextLink>
-              {userInfo ? (
-                <LoginUserButton />
-              ) : (
-                <NextLink href='/login' passHref>
-                  <Link>Login</Link>
+            <List className={classes.flexContainer}>
+              <ListItem>
+                <NextLink href='/cart' passHref>
+                  <Link>
+                    {cart.cartItems.length > 0 ? (
+                      <Badge
+                        badgeContent={cart.cartItems.length}
+                        color='secondary'
+                      >
+                        <Typography color={'secondary'}>Cart</Typography>
+                      </Badge>
+                    ) : (
+                      <Typography color={'secondary'}>Cart</Typography>
+                    )}
+                  </Link>
                 </NextLink>
-              )}
-            </div>
+              </ListItem>
+              <ListItem>
+                {userInfo ? (
+                  <LoginUserButton />
+                ) : (
+                  <NextLink href='/login' passHref>
+                    <Link>
+                      <Typography color={'secondary'}>Login</Typography>
+                    </Link>
+                  </NextLink>
+                )}
+              </ListItem>
+            </List>
           </Box>
         </Toolbar>
       </AppBar>

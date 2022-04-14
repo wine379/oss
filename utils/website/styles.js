@@ -43,6 +43,14 @@ const useStyles = makeStyles({
   fullWidth: {
     width: '100%',
   },
+  checkoutWizard: {
+    marginTop: 10,
+  },
+  flexContainer:{
+  display: 'flex',
+  flexDirection: 'row',
+  padding: 0,
+}
 });
 
 export default useStyles;

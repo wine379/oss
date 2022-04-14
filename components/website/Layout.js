@@ -6,10 +6,13 @@ import { Container, CssBaseline,  TableContainer, ThemeProvider } from '@mui/mat
 import theme from '../../utils/website/theme';
 import Head from 'next/head';
 import {Store} from '../../utils/Store';
+import useStyles from '../../utils/website/styles';
 
 const Layout = ({ title, children, description }) => {
   const { state, dispatch } = useContext(Store);
+  const {cart: {cartIsEmpty}} = state;
   const { showHeroImage } = state;
+  const classes = useStyles()
   return (
     <>
       <Head>
@@ -22,7 +25,8 @@ const Layout = ({ title, children, description }) => {
         <AppAppBar />
         {showHeroImage ? <ProductHero /> : ''}
         <Container>{children}</Container>
-        <AppFooter />
+        {<><br /><br /></> }
+        <AppFooter className={classes.footer} />
       </ThemeProvider>
     </>
   );

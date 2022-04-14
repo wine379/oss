@@ -14,17 +14,17 @@ import {
   ListItem,
   Typography,
   CircularProgress,
+  Button,
 } from '@mui/material';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import useRouter from 'next/router';
-import Layout from '../../components/Layout';
+import Layout from '../../components/website/Layout';
 import { Store } from '../../utils/Store';
-import useStyles from '../../utils/styles';
+import useStyles from '../../utils/website/styles';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
 import axios from 'axios';
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -49,7 +49,6 @@ const reducer = (state, action) => {
 
 const Order = ({ params }) => {
   const orderId = params.id;
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const { state } = useContext(Store);
   const router = useRouter;
   const classes = useStyles();
@@ -61,19 +60,7 @@ const Order = ({ params }) => {
     { loading: true, order: {}, error: '' }
   );
 
-  const {
-    shippingAddress,
-    shippingPrice,
-    paymentMethod,
-    orderItems,
-    itemsPrice,
-    taxPrice,
-    totalPrice,
-    isPaid,
-    isDelivered,
-    paidAt,
-    deliveredAt,
-  } = order;
+  const { orderDetails, isPaid, paidAt, deliveredAt } = order;
 
   useEffect(() => {
     if (!userInfo) {
@@ -97,23 +84,6 @@ const Order = ({ params }) => {
       if (successPay) {
         dispatch({ type: 'PAY_RESET' });
       }
-    } else {
-      const loadPaypalScript = async () => {
-        const { data: clientId } = await axios.get('/api/keys/paypal', {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
-
-        paypalDispatch({
-          type: 'resetOptions',
-          value: {
-            'client-id': clientId,
-            currency: 'USD',
-          },
-        });
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-      };
-
-      loadPaypalScript();
     }
   }, [order, successPay]);
 
@@ -311,19 +281,16 @@ const Order = ({ params }) => {
                   </Grid>
                 </ListItem>
                 {!isPaid && (
-                  <Link>
-                    {isPending ? (
-                      <CircularProgress />
-                    ) : (
-                      <div className={classes.fullWidth}>
-                        <PayPalButtons
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={onError}
-                        />
-                      </div>
-                    )}
-                  </Link>
+                  <ListItem>
+                    <Button
+                      onClick={placeOrderHandler}
+                      variant='contained'
+                      color='primary'
+                      fullWidth
+                    >
+                      Place Order
+                    </Button>
+                  </ListItem>
                 )}
               </List>
             </Card>

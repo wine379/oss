@@ -368,28 +368,28 @@ const data = {
       code: 'C001',
       name: 'Fidelis Building Contractors',
       address: 'Not provided',
-      email: 'josephmadaka@gmail.com ',
+      email: 'josephmadaka@gmail.com',
       phone: 'Not provided',
     },
     {
       code: 'C002',
       name: 'DBM Construction',
       address: 'Not provided',
-      email: 'dbmconstruction2000@gmail.com ',
+      email: 'dbmconstruction2000@gmail.com',
       phone: 'Not provided',
     },
     {
       code: 'C003',
       name: 'Irrigator System Ltd.',
       address: 'Not provided',
-      email: 'irrigatorsystemsltd@gmail.com ',
+      email: 'irrigatorsystemsltd@gmail.com',
       phone: 'Not provided',
     },
     {
       code: 'C004',
       name: 'Trinkon Group Ltd.',
       address: 'Not provided',
-      email: 'info@trinkongroup.com ',
+      email: 'info@trinkongroup.com',
       phone: 'Not provided',
     },
   ],
@@ -638,7 +638,7 @@ const data = {
   wards: [
     {
       code: 'LCC001',
-      name: 'Chisapo I ward ',
+      name: 'Chisapo I ward',
     },
     {
       code: 'LCC002',
@@ -646,111 +646,111 @@ const data = {
     },
     {
       code: 'LCC003',
-      name: 'Phwetekere ward ',
+      name: 'Phwetekere ward',
     },
     {
       code: 'LCC004',
-      name: 'Mbidzi ward ',
+      name: 'Mbidzi ward',
     },
     {
       code: 'LCC005',
-      name: 'Chigoneka ward ',
+      name: 'Chigoneka ward',
     },
     {
       code: 'LCC006',
-      name: 'Mtsiliza ward ',
+      name: 'Mtsiliza ward',
     },
     {
       code: 'LCC007',
-      name: 'Mvunguti ward ',
+      name: 'Mvunguti ward',
     },
     {
       code: 'LCC008',
-      name: 'Mgona Chatata ward ',
+      name: 'Mgona Chatata ward',
     },
     {
       code: 'LCC009',
-      name: 'Kabwabwa ward ',
+      name: 'Kabwabwa ward',
     },
     {
       code: 'LCC010',
-      name: 'Chimutu ward ',
+      name: 'Chimutu ward',
     },
     {
       code: 'LCC011',
-      name: 'Nyama ward ',
+      name: 'Nyama ward',
     },
     {
       code: 'LCC012',
-      name: 'Mteza ward ',
+      name: 'Mteza ward',
     },
     {
       code: 'LCC013',
-      name: 'Milindi ward ',
+      name: 'Milindi ward',
     },
     {
       code: 'LCC014',
-      name: 'Nankhaka ward ',
+      name: 'Nankhaka ward',
     },
     {
       code: 'LCC015',
-      name: 'StateHouse ward ',
+      name: 'StateHouse ward',
     },
     {
       code: 'LCC016',
-      name: 'Chilinde I ward ',
+      name: 'Chilinde I ward',
     },
     {
       code: 'LCC017',
-      name: 'Chilinde II ward ',
+      name: 'Chilinde II ward',
     },
     {
       code: 'LCC018',
-      name: 'Kaliyeka ward ',
+      name: 'Kaliyeka ward',
     },
     {
       code: 'LCC019',
-      name: 'Tsabango I Ward ',
+      name: 'Tsabango I Ward',
     },
     {
       code: 'LCC020',
-      name: 'Kawale I Ward ',
+      name: 'Kawale I Ward',
     },
     {
       code: 'LCC021',
-      name: 'Kawale II Ward ',
+      name: 'Kawale II Ward',
     },
     {
       code: 'LCC022',
-      name: 'Ngwenya Ward ',
+      name: 'Ngwenya Ward',
     },
     {
       code: 'LCC023',
-      name: 'Biwi Ward ',
+      name: 'Biwi Ward',
     },
     {
       code: 'LCC024',
-      name: 'Mchesi Ward ',
+      name: 'Mchesi Ward',
     },
     {
       code: 'LCC025',
-      name: 'Mtandire Ward ',
+      name: 'Mtandire Ward',
     },
     {
       code: 'LCC026',
-      name: 'Lumbadzi Ward ',
+      name: 'Lumbadzi Ward',
     },
     {
       code: 'LCC027',
-      name: 'Mariya Ward ',
+      name: 'Mariya Ward',
     },
     {
       code: 'LCC028',
-      name: 'Sese Ward ',
+      name: 'Sese Ward',
     },
     {
       code: 'LCC029',
-      name: 'Tsabango II ward ',
+      name: 'Tsabango II ward',
     },
   ],
 };

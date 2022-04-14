@@ -53,6 +53,11 @@ const theme = {
       default: rawTheme.palette.common.white,
       placeholder: grey[200],
     },
+    astril: {
+      light: '#6abcd5',
+      main: '#348ca4',
+      dark: '#005f75',
+    },
   },
   footer: {
     marginTop: 10,
