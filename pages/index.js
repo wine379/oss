@@ -10,7 +10,7 @@ import { Store } from '../utils/Store';
 const Home = () => {
   const { dispatch } = useContext(Store);
   useEffect(() => {
-    dispatch({ type: 'HERO_IMAGE_ON'});
+    dispatch({ type: 'HERO_IMAGE_ON' });
   }, []);
   return (
     <Layout>

@@ -1,0 +1,13 @@
+FROM node
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+ENV MONGODB_URI=mongodb://localhost:27017/sanitation_app_db
+
+COPY . .
+
+RUN npm run build
+
+CMD ["npm", "run", "dev"]

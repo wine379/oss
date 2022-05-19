@@ -30,6 +30,7 @@ const structureLocationZones = [
 
 
 const Location = (props) => {
+  const { state, dispatch } = useContext(Store);
   const { areas, wards  } = props;
   const {
     handleSubmit,
@@ -38,25 +39,28 @@ const Location = (props) => {
     setValue,
   } = useForm();
 
-  const { state, dispatch } = useContext(Store);
+  
   const {
     userInfo,
     cart: { location, householdDetails },
   } = state;
   const router = useRouter();
-  useEffect(() => {
-    if (!userInfo) {
-      router.push('/login?redirect=/location');
-    }
-    if (!householdDetails) {
-      router.push('/household');
-    }
-    setValue('ward', location.ward);
-    setValue('area', location.area);
-    setValue('blockName', location.blockName);
-    setValue('structureLocationZone', location.structureLocationZone);
-    
-  }, []);
+  useEffect(
+    () => {
+      dispatch({ type: 'HERO_IMAGE_OFF' });
+      if (!userInfo) {
+        router.push('/login?redirect=/location');
+      }
+      if (!householdDetails) {
+        router.push('/household');
+      }
+      setValue('ward', location.ward);
+      setValue('area', location.area);
+      setValue('blockName', location.blockName);
+      setValue('structureLocationZone', location.structureLocationZone);
+    },
+    []
+  );
 
   const classes = useStyles();
   const submitHandler = ({ward, area, blockName, structureLocationZone }) => {

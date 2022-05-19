@@ -5,6 +5,7 @@ import Order from '../../../models/Order';
 import { isAuth } from '../../../utils/auth';
 import db from '../../../utils/db';
 import { onError } from '../../../utils/error';
+import Household from '../../../models/Ward';
 
 const handler = nc({
   onError,
@@ -21,20 +22,15 @@ handler.post(async (req, res) => {
            
   await db.connect();
   const newOrder = new Order({
-    orderItemsArray,
     orderNumber,
     orderStatus,
     paymentOption,
     willPayFullForOSS,
+    user: req.user._id,
   });
   const order = await newOrder.save();
-  // await db.disconnect();
-
-  // console.log(order)
-
-  debugger
-
-  res.status(201).send(order._id);
+  await db.disconnect();
+  res.status(201).send({order});
 });
 
 export default handler;

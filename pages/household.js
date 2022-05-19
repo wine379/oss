@@ -33,6 +33,7 @@ const Household = () => {
   } = state;
   const router = useRouter();
   useEffect(() => {
+    dispatch({ type: 'HERO_IMAGE_OFF' });
     if (!userInfo) {
       router.push('/login?redirect=/household');
     }

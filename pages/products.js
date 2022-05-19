@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
 import useRouter from 'next/router';
 import {
@@ -20,6 +20,10 @@ import { Store } from '../utils/Store';
 
 const Products = (props) => {
   const { state, dispatch } = useContext(Store);
+  useEffect(() => {
+    dispatch({ type: 'HERO_IMAGE_OFF' });
+  }, []);
+  
   const { products } = props;
   const router = useRouter;
 

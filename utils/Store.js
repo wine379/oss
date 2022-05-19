@@ -69,16 +69,15 @@ function reducer(state, action) {
         },
       };
     }
-    case 'CART_IS_EMPTY' : {
+    case 'CART_IS_EMPTY': {
       Cookies.set('cartIsEmpty', true);
       return {
         ...state,
         cart: {
           ...state.cart,
-          cartIsEmpty: true
-        }
-
-      }
+          cartIsEmpty: true,
+        },
+      };
     }
 
     case 'CART_REMOVE_ITEM': {
@@ -131,10 +130,57 @@ function reducer(state, action) {
         },
       };
 
-    case 'CLEAR_CART':{
+    case 'CLEAR_CART': {
       Cookies.set('cartIsEmpty', true);
-      return { ...state, cart: { ...state.cart, cartIsEmpty: true, cartItems: [] } };
+      return {
+        ...state,
+        cart: { ...state.cart, cartIsEmpty: true, cartItems: [] },
+      };
     }
+    case 'FETCH_ORDER_REQUEST':
+      return { ...state, loading: true, error: '' };
+    case 'FETCH_ORDER_SUCCESS':
+      return { ...state, loading: false, order: action.payload, error: '' };
+    case 'FETCH_ORDER_FAIL':
+      return { ...state, loading: false, error: action.payload };
+
+    case 'FETCH_ITEMS_REQUEST':
+      return { ...state, loadingItems: true, errorItems: '' };
+    case 'FETCH_ITEMS_SUCCESS':
+      return {
+        ...state,
+        loadingItems: false,
+        items: action.payload,
+        errorItems: '',
+      };
+    case 'FETCH_ITEMS_FAIL':
+      return { ...state, loadingItems: false, errorItems: action.payload };
+
+    case 'FETCH_HOUSEHOLD_REQUEST':
+      return { ...state, loadingHousehold: true, errorHousehold: '' };
+    case 'FETCH_HOUSEHOLD_SUCCESS':
+      return {
+        ...state,
+        loadingHousehold: false,
+        household: action.payload,
+        error: '',
+      };
+    case 'FETCH_HOUSEHOLD_FAIL':
+      return {
+        ...state,
+        loadingHousehold: false,
+        errorHousehold: action.payload,
+      };
+    case 'PAY_REQUEST':
+      return { ...state, loadingPay: true };
+    case 'PAY_SUCCESS':
+      return { ...state, loadingPay: false, sucessPay: true };
+    case 'PAY_FAIL':
+      return { ...state, loadingPay: false, errorPay: action.payload };
+    case 'PAY_RESET':
+      return { ...state, loadingPay: false, successPay: false, errorPay: '' };
+    case 'SET_ORDER_ITEMS':
+      return { ...state, orderItems: action.payload };
     default:
       return state;
   }

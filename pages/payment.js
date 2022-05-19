@@ -19,9 +19,10 @@ import CheckoutWizard from '../components/website/CheckoutWizard';
 
 
 const Payment = () => {
+  const { state, dispatch } = useContext(Store);
   const paymentOptions = [
     'Bank transfer',
-    'Back deposit',
+    'Bank deposit',
     'Cash',
     'Airtel money',
     'TNM mpamba',
@@ -35,13 +36,15 @@ const Payment = () => {
     setValue,
   } = useForm();
 
-  const { state, dispatch } = useContext(Store);
+  
   const {
     userInfo,
     cart: { paymentMethod, location},
   } = state;
   const router = useRouter();
+  
   useEffect(() => {
+    dispatch({ type: 'HERO_IMAGE_OFF' });
     if (!userInfo) {
       router.push('/login?redirect=/payment');
     }
@@ -116,7 +119,7 @@ const Payment = () => {
               render={({ field }) => (
                 <TextField
                   id='willPayFullForOSS'
-                  label='Select Payment Option'
+                  label='Will pay full for OSS service?'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth

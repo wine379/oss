@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import useRouter from 'next/router';
@@ -21,6 +21,10 @@ import { Store } from '../../utils/Store';
 
 const ProductScreen = (props) => {
   const { state, dispatch } = useContext(Store);
+  useEffect(() => {
+    dispatch({ type: 'HERO_IMAGE_OFF' });
+  }, []);
+  
   const router = useRouter;
   const { product } = props;
   const classes = useStyle();

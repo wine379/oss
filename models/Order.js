@@ -2,12 +2,6 @@ import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema(
   {
-    orderItems: [
-      {
-        productId: { type: String, required: true },
-        quantity: { type: Number, required: true, default: 1 },
-      },
-    ],
     orderNumber: {
       type: String,
       required: true,
@@ -24,6 +18,11 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    isDelivered: { type: Boolean, default: false },
+    isPaid: { type: Boolean, default: false },
+    paidAt: { type: Date },
+    deliveredAt: { type: Date },
   },
   {
     timestamps: true,

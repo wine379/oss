@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useState, useContext, useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import {
   TableContainer,
@@ -28,12 +28,40 @@ import axios from 'axios';
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'FETCH_REQUEST':
+    case 'FETCH_ORDER_REQUEST':
       return { ...state, loading: true, error: '' };
-    case 'FETCH_SUCCESS':
+    case 'FETCH_ORDER_SUCCESS':
       return { ...state, loading: false, order: action.payload, error: '' };
-    case 'FETCH_FAIL':
+    case 'FETCH_ORDER_FAIL':
       return { ...state, loading: false, error: action.payload };
+
+    case 'FETCH_ITEMS_REQUEST':
+      return { ...state, loadingItems: true, errorItems: '' };
+    case 'FETCH_ITEMS_SUCCESS':
+      return {
+        ...state,
+        loadingItems: false,
+        items: action.payload,
+        errorItems: '',
+      };
+    case 'FETCH_ITEMS_FAIL':
+      return { ...state, loadingItems: false, errorItems: action.payload };
+
+    case 'FETCH_HOUSEHOLD_REQUEST':
+      return { ...state, loadingHousehold: true, errorHousehold: '' };
+    case 'FETCH_HOUSEHOLD_SUCCESS':
+      return {
+        ...state,
+        loadingHousehold: false,
+        household: action.payload,
+        error: '',
+      };
+    case 'FETCH_HOUSEHOLD_FAIL':
+      return {
+        ...state,
+        loadingHousehold: false,
+        errorHousehold: action.payload,
+      };
     case 'PAY_REQUEST':
       return { ...state, loadingPay: true };
     case 'PAY_SUCCESS':
@@ -42,6 +70,8 @@ const reducer = (state, action) => {
       return { ...state, loadingPay: false, errorPay: action.payload };
     case 'PAY_RESET':
       return { ...state, loadingPay: false, successPay: false, errorPay: '' };
+    case 'SET_ORDER_ITEMS':
+      return { ...state, orderItems: action.payload };
     default:
       return state;
   }
@@ -55,37 +85,65 @@ const Order = ({ params }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { userInfo } = state;
 
-  const [{ loading, error, order, successPay }, dispatch] = useReducer(
+  const [{ loading, loadingItems,  error, order, items, successPay }, dispatch] = useReducer(
     reducer,
     { loading: true, order: {}, error: '' }
   );
 
-  const { orderDetails, isPaid, paidAt, deliveredAt } = order;
+  const {
+    orderNumber,
+    orderStatus,
+    paymentOption,
+    willPayFullForOSS,
+    isDelivered,
+    paidAt,
+    isPaid,
+    deliveredAt,
+    user,
+  } = order;
 
-  useEffect(() => {
-    if (!userInfo) {
-      return router.push('/login');
-    }
-
-    const fetchOrder = async () => {
-      try {
-        dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/orders/${orderId}`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
-      } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+  useEffect(
+    () => {
+      if (!userInfo) {
+        return router.push('/login');
       }
-    };
 
-    if (!order._id || successPay || (order._id && order._id !== orderId)) {
-      fetchOrder();
-      if (successPay) {
-        dispatch({ type: 'PAY_RESET' });
+      const fetchOrder = async () => {
+        try {
+          dispatch({ type: 'FETCH_ORDER_REQUEST' });
+          const { data } = await axios.get(`/api/orders/${orderId}`, {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+          });
+          dispatch({ type: 'FETCH_ORDER_SUCCESS', payload: data });
+        } catch (err) {
+          dispatch({ type: 'FETCH_ORDER_FAIL', payload: getError(err) });
+        }
+      };
+
+      const fetchItems = async () => {
+        try {
+          dispatch({ type: 'FETCH_ITEMS_REQUEST' });
+          const { data } = await axios.get(`/api/orderItems/${orderId}`, {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+          });
+          dispatch({ type: 'FETCH_ITEMS_SUCCESS', payload: data });
+        } catch (err) {
+          dispatch({ type: 'FETCH_ITEMS_FAIL', payload: getError(err) });
+        }
+      };
+
+      if (!order._id || successPay || (order._id && order._id !== orderId)) {
+        fetchOrder();
+        fetchItems();
+        if (successPay) {
+          dispatch({ type: 'PAY_RESET' });
+        }
       }
-    }
-  }, [order, successPay]);
+    },
+    [order, items]
+  );
+
+  
 
   const createOrder = (data, actions) => {
     return actions.order
@@ -126,11 +184,12 @@ const Order = ({ params }) => {
   };
 
   return (
-    <Layout title={`Order ${orderId}`}>
-      <Typography component='h1' variant='h1'>
-        Order {orderId}
+    <Layout title={`Order ${orderNumber}`}>
+      <Typography component='h1' variant='h3'>
+        Order: {orderNumber}
       </Typography>
-      {loading ? (
+
+      {loading || loadingItems ? (
         <CircularProgress />
       ) : error ? (
         <Typography className={classes.error}>{error}</Typography>
@@ -141,34 +200,29 @@ const Order = ({ params }) => {
               <List>
                 <ListItem>
                   <Typography component='h2' variant='h2'>
-                    {' '}
-                    Shipping Address{' '}
+                    Order Details:
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  {shippingAddress.fullName}, {shippingAddress.address},{' '}
-                  {shippingAddress.city}, {shippingAddress.postalCode},{' '}
-                  {shippingAddress.country}
+                  <strong>Order Enrolment Status: </strong>
+                  &nbsp;
+                  {orderStatus}, &nbsp;
+                  <strong>Payment Method: </strong>
+                  &nbsp;
+                  {paymentOption}, &nbsp;
+                  <strong>Payment status: </strong>
+                  &nbsp;
+                  {isPaid ? `paid at ${paidAt}` : 'not yet paid'}, &nbsp;
                 </ListItem>
                 <ListItem>
-                  Status:{' '}
+                  <strong>Will be able to pay in full?: </strong>
+                  &nbsp;
+                  {willPayFullForOSS ? 'Yes' : 'No'}, &nbsp;
+                  <strong>Is toilet contructed: </strong>
+                  &nbsp;
                   {isDelivered
-                    ? `delivered at ${deliveredAt}`
-                    : 'not delivered'}
-                </ListItem>
-              </List>
-            </Card>
-            <Card className={classes.section}>
-              <List>
-                <ListItem>
-                  <Typography component='h2' variant='h2'>
-                    {' '}
-                    Payment Method{' '}
-                  </Typography>
-                </ListItem>
-                <ListItem>{paymentMethod}</ListItem>
-                <ListItem>
-                  Status: {isPaid ? `paid at ${paidAt}` : 'not paid'}
+                    ? `contruction finined at ${deliveredAt}`
+                    : 'not contructed yet'}
                 </ListItem>
               </List>
             </Card>
@@ -193,14 +247,17 @@ const Order = ({ params }) => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {orderItems.map((item) => (
+                        {items.map((item) => (
                           <TableRow key={item._id}>
                             <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
+                              <NextLink
+                                href={`/product/${item.product.slug}`}
+                                passHref
+                              >
                                 <Link>
                                   <Image
-                                    src={item.image}
-                                    alt={item.name}
+                                    src={item.product.image}
+                                    alt={item.product.name}
                                     width={50}
                                     height={50}
                                   ></Image>
@@ -208,17 +265,18 @@ const Order = ({ params }) => {
                               </NextLink>
                             </TableCell>
                             <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
+                              <NextLink
+                                href={`/product/${item.product.slug}`}
+                                passHref
+                              >
                                 <Link>
-                                  <Typography>{item.name}</Typography>
+                                  <Typography>{item.product.name}</Typography>
                                 </Link>
                               </NextLink>
                             </TableCell>
+                            <TableCell align='right'>{item.quantity}</TableCell>
                             <TableCell align='right'>
-                              <Typography>{item.quantity}</Typography>
-                            </TableCell>
-                            <TableCell align='right'>
-                              <Typography>${item.price}</Typography>
+                              MWK{item.product.price * item.quantity}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -234,64 +292,8 @@ const Order = ({ params }) => {
             <Card className={classes.section}>
               <List>
                 <ListItem>
-                  <Typography variant='h2'>Order Summary</Typography>
+                  <Typography variant='h5'>We will notify you once your order is approved. Thank you.</Typography>
                 </ListItem>
-                <ListItem>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography>Items:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography align='right'>${itemsPrice}</Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                <ListItem>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography>Shipping:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography align='right'>${shippingPrice}</Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                <ListItem>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography>Tax(15%):</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography align='right'>${taxPrice}</Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                <ListItem>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography>
-                        <strong>Total:</strong>
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography align='right'>
-                        <strong>${totalPrice}</strong>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                {!isPaid && (
-                  <ListItem>
-                    <Button
-                      onClick={placeOrderHandler}
-                      variant='contained'
-                      color='primary'
-                      fullWidth
-                    >
-                      Place Order
-                    </Button>
-                  </ListItem>
-                )}
               </List>
             </Card>
           </Grid>

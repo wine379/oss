@@ -36,28 +36,55 @@ import { useSnackbar } from 'notistack';
 import { getError } from '../utils/error';
 import axios from 'axios';
 
-let orderItemsArray = [];
+
 
 const extractOrderItems = (items) => {
+  let orderItemsArray = [];
+
   items.map((item) => {
     const productId = item._id
     const quantity = item.quantity
 
     orderItemsArray.push({ productId, quantity });
   })
+
+  return orderItemsArray;
 }
 
 
 const PlaceOrder = (props) => {
+  const { state, dispatch } = useContext(Store);
+  
   const { areas, wards } = props;
-    const { state, dispatch } = useContext(Store);
-    const router = useRouter;
+    const router = useRouter();
     const classes = useStyles();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const {
       userInfo,
       cart: { cartItems, householdDetails, location, paymentMethod },
     } = state;
+
+    useEffect(
+      () => {
+        dispatch({ type: 'HERO_IMAGE_OFF' });
+        if (!userInfo) {
+          router.push('/login?redirect=/payment');
+        }
+        if (!householdDetails) {
+          router.push('/household');
+        }
+        if (!paymentMethod) {
+          router.push('/payment');
+        }
+        if (!location.area) {
+          router.push('/location');
+        }
+        if (cartItems.length === 0) {
+          router.push('/cart');
+        }
+      },
+      [householdDetails, paymentMethod, cartItems]
+    );
 
     const dateNow = new Date();
     const milliseconds = dateNow.getTime();
@@ -77,19 +104,60 @@ const PlaceOrder = (props) => {
       cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
     );
 
-    useEffect(() => {
-      if (!userInfo) {
-        router.push('/login?redirect=/payment');
-      }
-      if (!paymentMethod) {
-        router.push('/payment');
-      }
-      if (cartItems.length === 0) {
-        router.push('/cart');
-      }
-    }, []);
+    
 
     const [loading, setLoading] = useState(false);
+
+    const createHousehold = async ({
+      adminNotes,
+      area,
+      avarageMonthlyIncomeRange,
+      blockName,
+      code,
+      currentLatrineType,
+      enrollmentStatus,
+      homeOwnershipStatus,
+      isPoor,
+      isVulnerable,
+      mainSourceOfLiving,
+      name,
+      order,
+      plotNumber,
+      structureLocationZone,
+      ward,
+      willPayFullForOSS,
+    }) => {
+      const { data } = await axios.post(
+        '/api/households/create',
+        {
+          adminNotes,
+          area,
+          avarageMonthlyIncomeRange,
+          blockName,
+          code,
+          currentLatrineType,
+          enrollmentStatus,
+          homeOwnershipStatus,
+          isPoor,
+          isVulnerable,
+          mainSourceOfLiving,
+          name,
+          order,
+          plotNumber,
+          structureLocationZone,
+          ward,
+          willPayFullForOSS,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      return data;
+    };
+
 
     const placeOrderHandler = async () => {
       closeSnackbar();
@@ -110,44 +178,28 @@ const PlaceOrder = (props) => {
       const willPayFullForOSS =
         paymentMethod.willPayFullForOSS === 'Yes' ? true : false;
 
-      const householdInput = {
-        ...householdDetails,
-        code: householdCode,
-        blockName,
-        isPoor,
-        isVulnerable,
-        willPayFullForOSS,
-        adminNotes:
-          'This household was registered through the website on ' +
-          new Date().toDateString(),
-        enrollmentStatus: 'Pending',
-        structureLocationZone: location.structureLocationZone,
-        areaId,
-        wardId
-      };
-
-      extractOrderItems(cartItems)
-
-      const orderDetails = {
-        orderItemsArray,
-        orderNumber,
-        orderStatus: 'Pending',
-        paymentOption: paymentMethod.paymentOption,
-        willPayFullForOSS,
-       };
-
       try {
-        console.log({
-          orderDetails,
-          householdInput,
-        });
-
         setLoading(true);
 
-        const { orderData } = await axios.post(
+        const householdInput = {
+          ...householdDetails,
+          code: householdCode,
+          blockName,
+          isPoor,
+          isVulnerable,
+          willPayFullForOSS,
+          adminNotes:
+            'This household was registered through the website on ' +
+            new Date().toDateString(),
+          enrollmentStatus: 'Pending',
+          structureLocationZone: location.structureLocationZone,
+          area: areaId,
+          ward: wardId,
+        };
+
+        const { data } = await axios.post(
           '/api/orders/create',
           {
-            orderItemsArray,
             orderNumber,
             orderStatus: 'Pending',
             paymentOption: paymentMethod.paymentOption,
@@ -160,27 +212,39 @@ const PlaceOrder = (props) => {
           }
         );
 
-        // code:householdInput.code,
-        // enrollmentStatus: householdInput.enrollmentStatus,
-        // adminNotes: householdInput.adminNotes,
-        // blockName: householdInput.blockName,
-        // plotNumber: householdInput.plotNumber,
-        // name: householdInput.name,
-        // mainSourceOfLiving: householdInput.mainSourceOfLiving,
-        // avarageMonthlyIncomeRange: householdInput.avarageMonthlyIncomeRange,
-        // homeOwnershipStatus: householdInput.homeOwnershipStatus,
-        // structureLocationZone: householdInput.structureLocationZone,
-        // currentLatrineType: householdInput.name,
-        // isVulnerable: householdInput.name,
-        // isPoor: householdInput.name,
-        // willPayFullForOSS: householdInput.name,
+        const orderId = data.order._id
 
-        console.log(orderData);
 
-        // dispatch({ type: 'CLEAR_CART' });
-        // Cookies.remove('cartItems');
-        // setLoading(false);
-        // router.push(`/order/${orderData._id}`);
+        const createOrderItems = () => {
+          cartItems.map(async (item) => {
+            const { data } = await axios.post(
+              '/api/orderItems/create',
+              {
+                product: item._id,
+                quantity: item.quantity,
+                order: orderId,
+              },
+              {
+                headers: {
+                  authorization: `Bearer ${userInfo.token}`,
+                },
+              }
+            );
+          });
+
+        }
+
+        createOrderItems();
+
+        const newHouseholdInput = { ...householdInput, order: data.order._id };
+
+        const household = createHousehold(newHouseholdInput);
+
+        dispatch({ type: 'CLEAR_CART' });
+        Cookies.remove('cartItems');
+        setLoading(false);
+
+        router.push(`/order/${data.order._id}`);
       } catch (e) {
         setLoading(false);
         enqueueSnackbar(getError(e), { variant: 'error' });

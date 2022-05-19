@@ -54,11 +54,10 @@ const HouseholdSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    willPayFullForOSS: {
-      type: Boolean,
-      required: true,
-    },
-    
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
+    area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
+    ward: { type: mongoose.Schema.Types.ObjectId, ref: 'Ward' },
   },
   {
     timestamps: true,
@@ -66,6 +65,6 @@ const HouseholdSchema = new mongoose.Schema(
 );
 
 const Household =
-  mongoose.models.Contractor || mongoose.model('Household', HouseholdSchema);
+  mongoose.models.Household || mongoose.model('Household', HouseholdSchema);
 
 export default Household;

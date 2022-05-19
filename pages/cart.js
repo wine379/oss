@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import {
   TableContainer,
@@ -26,6 +26,9 @@ import { Store } from '../utils/Store';
 
 const CartScreen = () => {
   const { state, dispatch } = useContext(Store);
+   useEffect(() => {
+     dispatch({ type: 'HERO_IMAGE_OFF' });
+   }, []);
   const router = useRouter;
   const {
     cart: { cartItems },

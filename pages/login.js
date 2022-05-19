@@ -18,6 +18,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
 const Login = () => {
+  const { state, dispatch } = useContext(Store);
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
   }, []);
@@ -27,7 +28,7 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { state, dispatch } = useContext(Store);
+  
   const { userInfo } = state;
   const router = useRouter();
   const { redirect } = router.query;
@@ -127,7 +128,7 @@ const Login = () => {
           </ListItem>
           <ListItem>
             Don&#39;t have an account? &nbsp;
-            <NextLink href={`/register?redirect=${redirect || '/'}`} passHref>
+            <NextLink href={'/register'} passHref>
               <Link>Register</Link>
             </NextLink>
           </ListItem>
