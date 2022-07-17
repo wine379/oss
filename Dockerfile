@@ -6,10 +6,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-ENV MONGODB_URI=mongodb://143.198.74.132:27017/sanitation_app_db
-
 COPY . .
 
 RUN npm run build
+
+EXPOSE 3000
 
 CMD ["npm", "run", "dev"]

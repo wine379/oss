@@ -81,30 +81,13 @@ const Header = (props) => {
           <Grid container alignItems='center' spacing={1}>
             <Grid item xs>
               <Typography color='inherit' variant='h5' component='h1'>
-                Authentication
+                Dashboard
               </Typography>
-            </Grid>
-            <Grid item>
-              <Button
-                sx={{ borderColor: lightColor }}
-                variant='outlined'
-                color='inherit'
-                size='small'
-              >
-                Web setup
-              </Button>
-            </Grid>
-            <Grid item>
-              <Tooltip title='Help'>
-                <IconButton color='inherit'>
-                  <HelpIcon />
-                </IconButton>
-              </Tooltip>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
-      <AppBar
+      {/* <AppBar
         color='information'
         component='div'
         position='static'
@@ -117,7 +100,7 @@ const Header = (props) => {
           <Tab label='Templates' />
           <Tab label='Usage' />
         </Tabs>
-      </AppBar>
+      </AppBar> */}
     </React.Fragment>
   );
 }

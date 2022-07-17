@@ -8,7 +8,7 @@ import { Badge, List, ListItem, Switch, Typography } from '@mui/material';
 import NextLink from 'next/link';
 import LoginUserButton from '../LoginUserButton';
 import { Store } from '../../utils/Store';
-import { Image } from '@mui/icons-material';
+import Image from 'next/image';
 import useStyles from '../../utils/website/styles';
 
 const rightLink = {
@@ -35,7 +35,7 @@ const AppAppBar = () => {
       <AppBar position='fixed'>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           &nbsp;
-          <img src={logo} alt='logo' />
+          <Image src={logo} alt={'logo'} width={70} height={70}></Image>
           <Box sx={{ flex: 1 }} />
           <Link
             variant='h6'
