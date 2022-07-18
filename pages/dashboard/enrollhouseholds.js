@@ -10,6 +10,8 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  ListItem,
+  List,
 } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -19,6 +21,10 @@ import Layout from '../../components/dashboard/Layout';
 import styles from '../../styles/Home.module.css';
 import EnrollmentWizard from '../../components/dashboard/EnrollmentWizard';
 import useStyles from '../../utils/website/styles';
+import { Controller } from 'react-hook-form';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import DatePicker from 'react-multi-date-picker';
+import SearchComponent from '../../components/dashboard/enrollment/SearchComponent';
 
 const EnrollHouseholds = () => {
   const classes = useStyles();
@@ -28,7 +34,18 @@ const EnrollHouseholds = () => {
       <div className={classes.checkoutWizard}></div>
       <EnrollmentWizard activeStep={2} />
       <div></div>
-      Enroll Households Components come here...
+      <form className={classes.form}>
+        <List>
+          <ListItem>
+            <SearchComponent />
+          </ListItem>
+          <ListItem>
+            <Button variant='contained' type='submit' fullWidth color='primary'>
+              Continue
+            </Button>
+          </ListItem>
+        </List>
+      </form>
     </Layout>
   );
 };

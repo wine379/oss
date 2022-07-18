@@ -10,15 +10,17 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
-import PeopleIcon from '@mui/icons-material/People';
-import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
-import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
-import PublicIcon from '@mui/icons-material/Public';
-import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
-import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
-import TimerIcon from '@mui/icons-material/Timer';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
+import PaymentIcon from '@mui/icons-material/Payment';
+import AddTaskIcon from '@mui/icons-material/AddTask';
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import CasesIcon from '@mui/icons-material/Cases';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
-import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 const categories = [
   {
@@ -26,18 +28,18 @@ const categories = [
     children: [
       {
         id: 'Register new households',
-        icon: <PeopleIcon />,
+        icon: <FamilyRestroomIcon />,
         active: true,
         link: '/dashboard/register',
       },
       {
         id: 'Enroll households',
-        icon: <DnsRoundedIcon />,
+        icon: <AppRegistrationIcon />,
         link: '/dashboard/selecthouseholds',
       },
       {
         id: 'Manage payments',
-        icon: <PermMediaOutlinedIcon />,
+        icon: <PaymentIcon />,
         link: '/dashboard/managepayments',
       },
     ],
@@ -47,27 +49,27 @@ const categories = [
     children: [
       {
         id: 'Approve projects',
-        icon: <PublicIcon />,
+        icon: <AddTaskIcon />,
         link: '/dashboard/register',
       },
       {
         id: 'Manage works',
-        icon: <SettingsEthernetIcon />,
+        icon: <WorkHistoryIcon />,
         link: '/dashboard/register',
       },
       {
         id: 'Certify completed works',
-        icon: <SettingsInputComponentIcon />,
+        icon: <VerifiedUserIcon />,
         link: '/dashboard/register',
       },
       {
         id: 'Manage cases',
-        icon: <SettingsInputComponentIcon />,
+        icon: <CasesIcon />,
         link: '/dashboard/register',
       },
       {
         id: 'Reports',
-        icon: <SettingsInputComponentIcon />,
+        icon: <AssessmentIcon />,
         link: '/dashboard/register',
       },
     ],
@@ -82,17 +84,17 @@ const categories = [
       },
       {
         id: 'Manage products',
-        icon: <TimerIcon />,
+        icon: <ProductionQuantityLimitsIcon />,
         link: '/dashboard/register',
       },
       {
         id: 'Manage locations',
-        icon: <PhonelinkSetupIcon />,
+        icon: <EditLocationAltIcon />,
         link: '/dashboard/register',
       },
       {
         id: 'Manage users',
-        icon: <PhonelinkSetupIcon />,
+        icon: <ManageAccountsIcon />,
         link: '/dashboard/register',
       },
     ],
