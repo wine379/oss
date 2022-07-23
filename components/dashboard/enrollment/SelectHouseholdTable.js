@@ -21,6 +21,7 @@ import Switch from '@mui/material/Switch';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { visuallyHidden } from '@mui/utils';
 
 function createData(name, calories, fat, carbs, protein) {
@@ -81,34 +82,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'code',
     numeric: false,
     disablePadding: true,
-    label: 'Dessert (100g serving)',
+    label: 'Household code',
   },
   {
-    id: 'calories',
-    numeric: true,
+    id: 'head',
+    numeric: false,
     disablePadding: false,
-    label: 'Calories',
+    label: 'Household head',
   },
   {
-    id: 'fat',
-    numeric: true,
+    id: 'technology',
+    numeric: false,
     disablePadding: false,
-    label: 'Fat (g)',
+    label: 'Technology',
   },
   {
-    id: 'carbs',
+    id: 'price',
     numeric: true,
     disablePadding: false,
-    label: 'Carbs (g)',
+    label: 'Technology price',
   },
   {
-    id: 'protein',
+    id: 'balance',
     numeric: true,
     disablePadding: false,
-    label: 'Protein (g)',
+    label: 'Balance payment(%)',
   },
 ];
 
@@ -295,7 +296,7 @@ export default function EnhancedTable() {
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
+            aria-labelledby='tableTitle'
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
@@ -319,15 +320,15 @@ export default function EnhancedTable() {
                     <TableRow
                       hover
                       onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
+                      role='checkbox'
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell padding='checkbox'>
                         <Checkbox
-                          color="primary"
+                          color='primary'
                           checked={isItemSelected}
                           inputProps={{
                             'aria-labelledby': labelId,
@@ -335,17 +336,17 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell
-                        component="th"
+                        component='th'
                         id={labelId}
-                        scope="row"
-                        padding="none"
+                        scope='row'
+                        padding='none'
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align='left'>{row.calories}</TableCell>
+                      <TableCell align='left'>{row.fat}</TableCell>
+                      <TableCell align='right'>{row.carbs}</TableCell>
+                      <TableCell align='right'>{row.protein}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -363,7 +364,7 @@ export default function EnhancedTable() {
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
-          component="div"
+          component='div'
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
@@ -373,7 +374,7 @@ export default function EnhancedTable() {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label='Dense padding'
       />
     </Box>
   );

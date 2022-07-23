@@ -24,6 +24,7 @@ import Layout from '../../components/dashboard/Layout';
 import styles from '../../styles/Home.module.css';
 import EnrollmentWizard from '../../components/dashboard/EnrollmentWizard';
 import useStyles from '../../utils/website/styles';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const AllocateContractor = () => {
   const classes = useStyles();

@@ -35,7 +35,7 @@ const categories = [
       {
         id: 'Enroll households',
         icon: <AppRegistrationIcon />,
-        link: '/dashboard/selecthouseholds',
+        link: '/dashboard/enrollhouseholds',
       },
       {
         id: 'Manage payments',

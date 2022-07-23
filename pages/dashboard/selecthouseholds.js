@@ -30,7 +30,6 @@ import SearchComponent from '../../components/dashboard/common/SearchComponent';
 import SelectHouseholdTable from '../../components/dashboard/enrollment/SelectHouseholdTable';
 
 
-
 const SelectHouseholds = () => {
   const classes = useStyles();
 
