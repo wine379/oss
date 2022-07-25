@@ -24,14 +24,13 @@ export default function PaymentsTable() {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label='caption table'>
-        <caption>A basic table example with a caption</caption>
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align='right'>Calories</TableCell>
-            <TableCell align='right'>Fat&nbsp;(g)</TableCell>
-            <TableCell align='right'>Carbs&nbsp;(g)</TableCell>
-            <TableCell align='right'>Protein&nbsp;(g)</TableCell>
+            <TableCell>Household code</TableCell>
+            <TableCell align='right'>Household head</TableCell>
+            <TableCell align='right'>Technology</TableCell>
+            <TableCell align='right'>Technology price</TableCell>
+            <TableCell align='right'>Balance payment(%)</TableCell>
             <TableCell align='center'>Action</TableCell>
           </TableRow>
         </TableHead>

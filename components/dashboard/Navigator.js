@@ -35,7 +35,7 @@ const categories = [
       {
         id: 'Enroll households',
         icon: <AppRegistrationIcon />,
-        link: '/dashboard/enrollhouseholds',
+        link: '/dashboard/selecthouseholds',
       },
       {
         id: 'Manage payments',
@@ -50,7 +50,7 @@ const categories = [
       {
         id: 'Approve projects',
         icon: <AddTaskIcon />,
-        link: '/dashboard/register',
+        link: '/dashboard/selectprojects',
       },
       {
         id: 'Manage works',
