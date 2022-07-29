@@ -5,6 +5,13 @@ services:
     image: docker-nextjs-dev
     build: .
     restart: always
+    volumes:
+      - ./components:/app/components
+      - ./models:/app/models
+      - ./pages:/app/pages
+      - ./public:/app/public
+      - ./styles:/app/styles
+      - ./utils:/app/utils
     ports:
       - "3000:3000"
     depends_on:
@@ -13,7 +20,7 @@ services:
     container_name: mongo
     image: mongo
     restart: always
+    ports:
+      - "27017:27017"
     volumes:
       - ./data:/data/db
-    ports:
-      - "27018:27017"
