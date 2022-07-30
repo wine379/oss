@@ -58,7 +58,7 @@ const Payment = () => {
   
 
   const submitHandler = () => {
-    router.push('/dashboard/placeorder');
+    router.push('/dashboard/enrollhousehold');
   }
 
   // const submitHandler = ({ paymentOption, willPayFullForOSS }) => {

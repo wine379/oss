@@ -21,20 +21,22 @@ import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantity
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import GavelIcon from '@mui/icons-material/Gavel';
+import EditNotificationsIcon from '@mui/icons-material/EditNotifications';
 
 const categories = [
   {
     id: 'Enrollment',
     children: [
       {
-        id: 'Register new households',
+        id: 'Register new household',
         icon: <FamilyRestroomIcon />,
         active: true,
         link: '/dashboard/register',
       },
       {
-        id: 'Enroll households',
-        icon: <AppRegistrationIcon />,
+        id: 'Create contracts',
+        icon: <GavelIcon />,
         link: '/dashboard/selecthouseholds',
       },
       {
@@ -48,9 +50,9 @@ const categories = [
     id: 'OSS projects',
     children: [
       {
-        id: 'Approve projects',
-        icon: <AddTaskIcon />,
-        link: '/dashboard/selectprojects',
+        id: 'Create projects',
+        icon: <EditNotificationsIcon />,
+        link: '/dashboard/selectcontracts',
       },
       {
         id: 'Manage works',

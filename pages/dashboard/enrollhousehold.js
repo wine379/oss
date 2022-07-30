@@ -252,11 +252,11 @@ const PlaceOrder = (props) => {
     };
 
     return (
-      <Layout title='Place Order'>
+      <Layout title='Enroll household'>
         <div className={classes.checkoutWizard}></div>
         <CheckoutWizard activeStep={5} />
         <Typography component='h1' variant='h4'>
-          Place Order
+          Enroll household 
         </Typography>
 
         <Grid container spacing={1}>
@@ -344,7 +344,7 @@ const PlaceOrder = (props) => {
                 <ListItem>
                   <Typography component='h2' variant='h2'>
                     {' '}
-                    Order Items{' '}
+                    Technology{' '}
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -435,7 +435,7 @@ const PlaceOrder = (props) => {
                     color='primary'
                     fullWidth
                   >
-                    Place Order
+                    Enroll
                   </Button>
                 </ListItem>
                 {loading && (

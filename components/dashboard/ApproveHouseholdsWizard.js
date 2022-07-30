@@ -11,8 +11,8 @@ const CheckoutWizard = ({ activeStep = 0 }) => {
       alternativeLabel
     >
       {[
-        'Select projects',
-        'Approve projects',
+        'Select contracts',
+        'Create projects',
       ].map((step) => (
         <Step key={step}>
           <StepLabel>{step}</StepLabel>

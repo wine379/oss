@@ -16,7 +16,7 @@ const CheckoutWizard = ({ activeStep = 0 }) => {
         'Location details',
         'Choose technology',
         'Payment option',
-        'Place Order',
+        'Enroll Household',
       ].map((step) => (
         <Step key={step}>
           <StepLabel>{step}</StepLabel>

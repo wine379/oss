@@ -6,48 +6,47 @@ import {
   Button,
   Grid,
   IconButton,
-  MenuItem,
   Paper,
   TextField,
   Toolbar,
   Tooltip,
   Typography,
-  List,
   ListItem,
+  List,
+  MenuItem,
 } from '@mui/material';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import CustomCard from '../../components/dashboard/common/CustomCard';
 import CustomTabs from '../../components/dashboard/common/CustomTabs';
-import AssignContractorTable from '../../components/dashboard/enrollment/AssignContractorTable';
 import Layout from '../../components/dashboard/Layout';
 import styles from '../../styles/Home.module.css';
-import EnrollmentWizard from '../../components/dashboard/EnrollmentWizard';
+import ApproveHouseholdsWizard from '../../components/dashboard/ApproveHouseholdsWizard';
 import useStyles from '../../utils/website/styles';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import DatePicker from 'react-multi-date-picker';
+import SearchComponent from '../../components/dashboard/common/SearchComponent';
+import ProjectsTable from '../../components/dashboard/projects/ProjectsTable';
 import { Controller, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 
 
-const AllocateContractor = () => {
-  const classes = useStyles();
+const SelectContracts = () => {
+  const router = useRouter();
   const {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
   } = useForm();
-
-  const router = useRouter();
-
+  const classes = useStyles();
   const submitHandler = () => {
-    router.push('/dashboard/createcontracts');
+    router.push('/dashboard/createprojects');
   };
 
   return (
     <Layout>
       <div className={classes.checkoutWizard}></div>
-      <EnrollmentWizard activeStep={1} />
+      <ApproveHouseholdsWizard activeStep={0} />
       <div></div>
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Grid container spacing={1}>
@@ -62,26 +61,42 @@ const AllocateContractor = () => {
                 >
                   <TextField
                     id='area'
-                    label='Assign contractor'
+                    label='Select by'
                     variant='standard'
                     inputProps={{ type: 'text' }}
                     select
                     style={{ width: '40%' }}
                   >
-                    <MenuItem key={0} value={'Contractor A'}>
-                      Contractor A
+                    <MenuItem key={0} value={'Contract code'}>
+                      Contract code
                     </MenuItem>
-                    <MenuItem key={1} value={'Contractor B'}>
-                      Contractor B
+                    <MenuItem key={0} value={'Household code'}>
+                      Household code
                     </MenuItem>
-                    <MenuItem key={2} value={'Contractor C'}>
-                      Contractor C
+                    <MenuItem key={1} value={'Household head'}>
+                      Household head
+                    </MenuItem>
+                    <MenuItem key={2} value={'Area'}>
+                      Area
+                    </MenuItem>
+                    <MenuItem key={3} value={'Ward'}>
+                      Ward
+                    </MenuItem>
+                    <MenuItem key={4} value={'Product of choice'}>
+                      Product of choice
+                    </MenuItem>
+                    <MenuItem key={5} value={'Contractor'}>
+                      Contractor
                     </MenuItem>
                   </TextField>
+                  <SearchComponent
+                    variant='standard'
+                    label='Type household code'
+                  />
                 </Grid>
               </CardContent>
               <Grid item>
-                <AssignContractorTable />
+                <ProjectsTable />
               </Grid>
               <Grid item>
                 <List>
@@ -95,17 +110,6 @@ const AllocateContractor = () => {
                       Continue
                     </Button>
                   </ListItem>
-                  <ListItem>
-                    <Button
-                      type='button'
-                      variant='contained'
-                      color='secondary'
-                      fullWidth
-                      onClick={() => router.push('/dashboard/selecthouseholds')}
-                    >
-                      Back
-                    </Button>
-                  </ListItem>
                 </List>
               </Grid>
             </Card>
@@ -116,4 +120,4 @@ const AllocateContractor = () => {
   );
 };
 
-export default AllocateContractor;
+export default SelectContracts;

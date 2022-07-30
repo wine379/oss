@@ -85,7 +85,7 @@ const headCells = [
     id: 'code',
     numeric: false,
     disablePadding: true,
-    label: 'Household code',
+    label: 'Contract code',
   },
   {
     id: 'head',
@@ -202,7 +202,7 @@ const EnhancedTableToolbar = (props) => {
           id='tableTitle'
           component='div'
         >
-          New projects
+          New contracts
         </Typography>
       )}
 

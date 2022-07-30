@@ -335,7 +335,7 @@ const PlaceOrder = (props) => {
                   color='primary'
                   fullWidth
                 >
-                  Enroll households
+                  Create contracts
                 </Button>
               </ListItem>
               <ListItem>
@@ -345,7 +345,7 @@ const PlaceOrder = (props) => {
                   color='secondary'
                   fullWidth
                 >
-                  Cancel enrollments
+                  Cancel
                 </Button>
               </ListItem>
 

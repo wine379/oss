@@ -13,7 +13,7 @@ const EnrollmentWizard = ({ activeStep = 0 }) => {
       {[
         'Select households',
         'Allocate contractor',
-        'Enroll households',
+        'Create contracts',
       ].map((step) => (
         <Step key={step}>
           <StepLabel>{step}</StepLabel>
