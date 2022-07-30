@@ -37,7 +37,6 @@ import { getError } from '../../utils/error';
 import axios from 'axios';
 import ApproveHouseholdsWizard from '../../components/dashboard/ApproveHouseholdsWizard';
 import AssignContractorTable from '../../components/dashboard/enrollment/AssignContractorTable';
-import Chart from 'react-apexcharts';
 
 const extractOrderItems = (items) => {
   let orderItemsArray = [];
@@ -281,12 +280,7 @@ const PlaceOrder = (props) => {
               </ListItem>
               <ListItem>
                 {' '}
-                <Chart
-                  options={{ labels: ['A', 'B', 'C', 'D', 'E'] }}
-                  series={[44, 55, 41, 17, 15]}
-                  type='donut'
-                  width='380'
-                />
+                Pie Chart
               </ListItem>
             </List>
             <Grid item md={9} xs={12}></Grid>
