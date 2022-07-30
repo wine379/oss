@@ -43,9 +43,9 @@ const Household = () => {
   const router = useRouter();
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
-    if (!userInfo) {
-      router.push('/login?redirect=/household');
-    }
+    // if (!userInfo) {
+    //   router.push('/login?redirect=/household');
+    // }
     setValue('name', householdDetails.name);
     setValue('plotNumber', householdDetails.plotNumber);
     setValue('homeOwnershipStatus', householdDetails.homeOwnershipStatus);
@@ -60,44 +60,50 @@ const Household = () => {
   }, []);
 
   const classes = useStyles();
-  const submitHandler = ({
-    name,
-    plotNumber,
-    homeOwnershipStatus,
-    currentLatrineType,
-    avarageMonthlyIncomeRange,
-    mainSourceOfLiving,
-    isPoor,
-    isVulnerable,
-  }) => {
-    dispatch({
-      type: 'SAVE_HOUSEHOLD_DETAILS',
-      payload: {
-        name,
-        plotNumber,
-        homeOwnershipStatus,
-        currentLatrineType,
-        avarageMonthlyIncomeRange,
-        mainSourceOfLiving,
-        isPoor,
-        isVulnerable,
-      },
-    });
-    Cookies.set(
-      'householdDetails',
-      JSON.stringify({
-        name,
-        plotNumber,
-        homeOwnershipStatus,
-        currentLatrineType,
-        avarageMonthlyIncomeRange,
-        mainSourceOfLiving,
-        isPoor,
-        isVulnerable,
-      })
-    );
-    router.push('/location');
-  };
+
+  const submitHandler = () => {
+    router.push('/dashboard/location');
+  }
+
+  
+  // const submitHandler = ({
+  //   name,
+  //   plotNumber,
+  //   homeOwnershipStatus,
+  //   currentLatrineType,
+  //   avarageMonthlyIncomeRange,
+  //   mainSourceOfLiving,
+  //   isPoor,
+  //   isVulnerable,
+  // }) => {
+  //   dispatch({
+  //     type: 'SAVE_HOUSEHOLD_DETAILS',
+  //     payload: {
+  //       name,
+  //       plotNumber,
+  //       homeOwnershipStatus,
+  //       currentLatrineType,
+  //       avarageMonthlyIncomeRange,
+  //       mainSourceOfLiving,
+  //       isPoor,
+  //       isVulnerable,
+  //     },
+  //   });
+  //   Cookies.set(
+  //     'householdDetails',
+  //     JSON.stringify({
+  //       name,
+  //       plotNumber,
+  //       homeOwnershipStatus,
+  //       currentLatrineType,
+  //       avarageMonthlyIncomeRange,
+  //       mainSourceOfLiving,
+  //       isPoor,
+  //       isVulnerable,
+  //     })
+  //   );
+  //   router.push('/location');
+  // };
 
   return (
     <Layout title='Household details'>
@@ -375,7 +381,7 @@ const Household = () => {
               variant='contained'
               color='secondary'
               fullWidth
-              onClick={() => router.push('/dashboard/location')}
+              onClick={() => router.push('/dashboard/register')}
             >
               Back
             </Button>

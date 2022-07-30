@@ -45,12 +45,12 @@ const Location = (props) => {
   const router = useRouter();
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
-    if (!userInfo) {
-      router.push('/login?redirect=/location');
-    }
-    if (!householdDetails) {
-      router.push('/household');
-    }
+    // if (!userInfo) {
+    //   router.push('/login?redirect=/location');
+    // }
+    // if (!householdDetails) {
+    //   router.push('/household');
+    // }
     setValue('ward', location.ward);
     setValue('area', location.area);
     setValue('blockName', location.blockName);
@@ -58,17 +58,23 @@ const Location = (props) => {
   }, []);
 
   const classes = useStyles();
-  const submitHandler = ({ ward, area, blockName, structureLocationZone }) => {
-    dispatch({
-      type: 'SAVE_LOCATION',
-      payload: { ward, area, blockName, structureLocationZone },
-    });
-    Cookies.set(
-      'location',
-      JSON.stringify({ ward, area, blockName, structureLocationZone })
-    );
-    router.push('/payment');
-  };
+
+  const submitHandler = () => {
+    router.push('/dashboard/choosetechnology');
+  }
+
+ // const submitHandler = ({ ward, area, blockName, structureLocationZone }) => {
+ 
+  //   dispatch({
+  //     type: 'SAVE_LOCATION',
+  //     payload: { ward, area, blockName, structureLocationZone },
+  //   });
+  //   Cookies.set(
+  //     'location',
+  //     JSON.stringify({ ward, area, blockName, structureLocationZone })
+  //   );
+  //   router.push('/payment');
+  // };
 
   return (
     <Layout title='Location details'>
@@ -202,7 +208,7 @@ const Location = (props) => {
               variant='contained'
               color='secondary'
               fullWidth
-              onClick={() => router.push('/household')}
+              onClick={() => router.push('/dashboard/household')}
             >
               Back
             </Button>

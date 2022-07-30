@@ -43,28 +43,35 @@ const Payment = () => {
 
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
-    if (!userInfo) {
-      router.push('/login?redirect=/payment');
-    }
-    if (!location) {
-      router.push('/location');
-    }
+    // if (!userInfo) {
+    //   router.push('/login?redirect=/payment');
+    // }
+    // if (!location) {
+    //   router.push('/location');
+    // }
     setValue('paymentOption', paymentMethod.paymentOption);
     setValue('willPayFullForOSS', paymentMethod.willPayFullForOSS);
   }, []);
 
   const classes = useStyles();
-  const submitHandler = ({ paymentOption, willPayFullForOSS }) => {
-    dispatch({
-      type: 'SAVE_PAYMENT_METHOD',
-      payload: { paymentOption, willPayFullForOSS },
-    });
-    Cookies.set(
-      'paymentMethod',
-      JSON.stringify({ paymentOption, willPayFullForOSS })
-    );
-    router.push('/placeorder');
-  };
+
+  
+
+  const submitHandler = () => {
+    router.push('/dashboard/placeorder');
+  }
+
+  // const submitHandler = ({ paymentOption, willPayFullForOSS }) => {
+  //   dispatch({
+  //     type: 'SAVE_PAYMENT_METHOD',
+  //     payload: { paymentOption, willPayFullForOSS },
+  //   });
+  //   Cookies.set(
+  //     'paymentMethod',
+  //     JSON.stringify({ paymentOption, willPayFullForOSS })
+  //   );
+  //   router.push('/placeorder');
+  // };
 
   return (
     <Layout title='Payment details'>
@@ -148,7 +155,7 @@ const Payment = () => {
               variant='contained'
               color='secondary'
               fullWidth
-              onClick={() => router.push('/location')}
+              onClick={() => router.push('/dashboard/choosetechnology')}
             >
               Back
             </Button>

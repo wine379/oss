@@ -9,6 +9,8 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  List,
+  ListItem,
   Typography,
 } from '@mui/material';
 import axios from 'axios';
@@ -52,38 +54,57 @@ const ChooseTechnology = (props) => {
       <div className={classes.checkoutWizard}></div>
       <CheckoutWizard activeStep={3} />
       <div>
-        <Grid container spacing={3}>
-          {products.map((product) => (
-            <Grid item md={4} key={product.name}>
-              <Card>
-                <NextLink href={`/product/${product.slug}`} passHref>
-                  <CardActionArea>
-                    <CardMedia
-                      component='img'
-                      image={product.image}
-                      title={product.name}
-                    />
-                    <CardContent>
-                      <Typography>{product.name}</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </NextLink>
-                <CardActions>
-                  <Typography>
-                    MWK{dollarUSLocale.format(product.price)}
-                  </Typography>
-                  <Button
+        <List>
+          <ListItem>
+            <br />
+            <Typography component={'h3'} variant={'h4'} color={'primary'} >Click technology image to continue...</Typography>
+          </ListItem>
+          <ListItem>
+            <Grid container spacing={3}>
+              {products.map((product) => (
+                <Grid item md={4} key={product.name}>
+                  <Card>
+                    <NextLink href={'/dashboard/payment'} passHref>
+                      <CardActionArea>
+                        <CardMedia
+                          component='img'
+                          image={product.image}
+                          title={product.name}
+                        />
+                        <CardContent>
+                          <Typography>{product.name}</Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </NextLink>
+                    <CardActions>
+                      <Typography>
+                        MWK{dollarUSLocale.format(product.price)}
+                      </Typography>
+                      {/* <Button
                     size='small'
                     color='primary'
                     onClick={() => addToCartHandler(product)}
                   >
                     Add to cart
-                  </Button>
-                </CardActions>
-              </Card>
+                  </Button> */}
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
+          </ListItem>
+          <ListItem item md={4}>
+            <Button
+              type='button'
+              variant='contained'
+              color='secondary'
+              fullWidth
+              onClick={() => router.push('/dashboard/household')}
+            >
+              Back
+            </Button>
+          </ListItem>
+        </List>
       </div>
     </Layout>
   );

@@ -44,42 +44,45 @@ const Register = () => {
   }, []);
 
   const classes = useStyle();
-  const submitHandler = async ({
-    firstName,
-    lastName,
-    nationalID,
-    dateOfBirth,
-    phone,
-    email,
-    password,
-    confirmPassword,
-  }) => {
-    closeSnackbar();
-    if (password !== confirmPassword) {
-      enqueueSnackbar('Passwords do not match', { variant: 'error' });
-      return;
-    }
-    try {
-      const { data } = await axios.post('/api/users/register', {
-        firstName,
-        lastName,
-        dateOfBirth,
-        phone,
-        nationalID,
-        email,
-        password,
-      });
+  const submitHandler = () => {
+    router.push(redirect || '/dashboard/household');
+  }
+  // const submitHandler = async ({
+  //   firstName,
+  //   lastName,
+  //   nationalID,
+  //   dateOfBirth,
+  //   phone,
+  //   email,
+  //   password,
+  //   confirmPassword,
+  // }) => {
+  //   closeSnackbar();
+  //   if (password !== confirmPassword) {
+  //     enqueueSnackbar('Passwords do not match', { variant: 'error' });
+  //     return;
+  //   }
+  //   try {
+  //     const { data } = await axios.post('/api/users/register', {
+  //       firstName,
+  //       lastName,
+  //       dateOfBirth,
+  //       phone,
+  //       nationalID,
+  //       email,
+  //       password,
+  //     });
 
 
-      dispatch({ type: 'USER_LOGIN', payload: data });
-      Cookies.set('userInfo', JSON.stringify(data));
-      router.push(redirect || '/cart');
-    } catch (e) {
-      enqueueSnackbar(e.response.data ? e.response.data.message : e.message, {
-        variant: 'error',
-      });
-    }
-  };
+  //     dispatch({ type: 'USER_LOGIN', payload: data });
+  //     Cookies.set('userInfo', JSON.stringify(data));
+  //     router.push(redirect || '/cart');
+  //   } catch (e) {
+  //     enqueueSnackbar(e.response.data ? e.response.data.message : e.message, {
+  //       variant: 'error',
+  //     });
+  //   }
+  // };
 
 
   return (
