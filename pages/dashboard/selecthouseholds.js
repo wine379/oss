@@ -21,10 +21,11 @@ import CustomCard from '../../components/dashboard/common/CustomCard';
 import CustomTabs from '../../components/dashboard/common/CustomTabs';
 import Layout from '../../components/dashboard/Layout';
 import styles from '../../styles/Home.module.css';
+import { useRouter } from 'next/router';
 import EnrollmentWizard from '../../components/dashboard/EnrollmentWizard';
 import useStyles from '../../utils/website/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-multi-date-picker';
 import SearchComponent from '../../components/dashboard/common/SearchComponent';
 import SelectHouseholdTable from '../../components/dashboard/enrollment/SelectHouseholdTable';
@@ -32,12 +33,25 @@ import SelectHouseholdTable from '../../components/dashboard/enrollment/SelectHo
 
 const SelectHouseholds = () => {
   const classes = useStyles();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+  } = useForm();
+
+  const router = useRouter();
+
+  const submitHandler = () => {
+    router.push('/dashboard/allocatecontractor');
+  };
 
   return (
     <Layout>
       <div className={classes.checkoutWizard}></div>
       <EnrollmentWizard activeStep={0} />
       <div></div>
+      <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Card>
@@ -93,6 +107,7 @@ const SelectHouseholds = () => {
           </Card>
         </Grid>
       </Grid>
+      </form>
     </Layout>
   );
 };
