@@ -14,10 +14,14 @@ import Tabs from '@mui/material/Tabs';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { Store } from '../../utils/Store';
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 const Header = (props) => {
+   const { state} = React.useContext(Store);
+   const { dashboardTitle } = state;
+    
   const { onDrawerToggle } = props;
 
   return (
@@ -81,7 +85,7 @@ const Header = (props) => {
           <Grid container alignItems='center' spacing={1}>
             <Grid item xs>
               <Typography color='inherit' variant='h5' component='h1'>
-                Dashboard
+                {dashboardTitle}
               </Typography>
             </Grid>
           </Grid>

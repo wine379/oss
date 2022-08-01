@@ -5,6 +5,7 @@ export const Store = createContext();
 
 const initialState = {
   darkMode: Cookies.get('darkMode') === 'ON' ? true : false,
+  dashboardTitle: Cookies.get('darkMode'),
   showHeroImage: false,
   cart: {
     cartItems: Cookies.get('cartItems')
@@ -39,6 +40,11 @@ function reducer(state, action) {
         ...state,
         darkMode: false,
       };
+    case 'SET_DASHBOARD_TITLE':
+        return {
+          ...state,
+          dashboardTitle: action.payload,
+        };
     case 'HERO_IMAGE_ON':
       return {
         ...state,

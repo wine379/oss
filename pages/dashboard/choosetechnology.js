@@ -25,6 +25,10 @@ const ChooseTechnology = (props) => {
   const { state, dispatch } = useContext(Store);
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
+    dispatch({
+      type: 'SET_DASHBOARD_TITLE',
+      payload: 'Enrollment',
+    });
   }, []);
 
   const classes = useStyles();
