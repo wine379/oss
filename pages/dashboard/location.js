@@ -30,6 +30,17 @@ const structureLocationZones = [
 
 const Location = (props) => {
   const { state, dispatch } = useContext(Store);
+  const {
+    userInfo,
+    dashboardHouseholdDetails,
+    dashboardLocationDetails,
+  } = state;
+  const {
+    registrationArea,
+    registrationWard,
+    registrationBlockName,
+    registrationStructureZone,
+  } = dashboardLocationDetails;
   const { areas, wards } = props;
   const {
     handleSubmit,
@@ -38,47 +49,37 @@ const Location = (props) => {
     setValue,
   } = useForm();
 
-  const {
-    userInfo,
-    cart: { location, householdDetails },
-  } = state;
+  
   const router = useRouter();
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
-    dispatch({
-      type: 'SET_DASHBOARD_TITLE',
-      payload: 'Enrollment',
-    });
+    dispatch({ type: 'SET_DASHBOARD_TITLE', payload: 'Enrollment | registration', });
     // if (!userInfo) {
     //   router.push('/login?redirect=/location');
     // }
-    // if (!householdDetails) {
-    //   router.push('/household');
-    // }
-    setValue('ward', location.ward);
-    setValue('area', location.area);
-    setValue('blockName', location.blockName);
-    setValue('structureLocationZone', location.structureLocationZone);
+    if (!dashboardHouseholdDetails) {
+      router.push('/dashboard/household');
+    }
+    setValue('registrationArea', dashboardLocationDetails.registrationArea);
+    setValue('registrationWard', dashboardLocationDetails.registrationWard);
+    setValue('registrationBlockName', dashboardLocationDetails.registrationBlockName);
+    setValue('registrationStructureZone', dashboardLocationDetails.registrationStructureZone);
   }, []);
 
   const classes = useStyles();
 
-  const submitHandler = () => {
-    router.push('/dashboard/choosetechnology');
-  }
-
- // const submitHandler = ({ ward, area, blockName, structureLocationZone }) => {
+  const submitHandler = ({ registrationWard, registrationArea, registrationBlockName, registrationStructureZone }) => {
  
-  //   dispatch({
-  //     type: 'SAVE_LOCATION',
-  //     payload: { ward, area, blockName, structureLocationZone },
-  //   });
-  //   Cookies.set(
-  //     'location',
-  //     JSON.stringify({ ward, area, blockName, structureLocationZone })
-  //   );
-  //   router.push('/payment');
-  // };
+    dispatch({
+      type: 'SAVE_DASHBOARD_HOUSEHOLD_LOCATION_DETAILS',
+      payload: { registrationWard, registrationArea, registrationBlockName, registrationStructureZone },
+    });
+    Cookies.set(
+      'dashboardLocationDetails',
+      JSON.stringify({ registrationWard, registrationArea, registrationBlockName, registrationStructureZone })
+    );
+    router.push('/dashboard/choosetechnology');
+  };
 
   return (
     <Layout title='Location details'>
@@ -88,7 +89,7 @@ const Location = (props) => {
         <List>
           <ListItem>
             <Controller
-              name='area'
+              name='registrationArea'
               control={control}
               defaultValue=''
               rules={{
@@ -96,14 +97,14 @@ const Location = (props) => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='area'
+                  id='registrationArea'
                   label='Select Area'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.area)}
-                  helperText={errors.area && 'Area is required'}
+                  error={Boolean(errors.registrationArea)}
+                  helperText={errors.registrationArea && 'Area is required'}
                   {...field}
                 >
                   {areas.map((area) => (
@@ -117,7 +118,7 @@ const Location = (props) => {
           </ListItem>
           <ListItem>
             <Controller
-              name='ward'
+              name='registrationWard'
               control={control}
               defaultValue=''
               rules={{
@@ -125,14 +126,14 @@ const Location = (props) => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='ward'
+                  id='registrationWard'
                   label='Select Ward'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.ward)}
-                  helperText={errors.ward && 'Ward is required'}
+                  error={Boolean(errors.registrationWard)}
+                  helperText={errors.registrationWard && 'Ward is required'}
                   {...field}
                 >
                   {wards.map((ward) => (
@@ -146,7 +147,7 @@ const Location = (props) => {
           </ListItem>
           <ListItem>
             <Controller
-              name='blockName'
+              name='registrationBlockName'
               control={control}
               defaultValue=''
               rules={{
@@ -154,13 +155,13 @@ const Location = (props) => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='blockName'
+                  id='registrationBlockName'
                   label='Block name eg: Senti'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
-                  error={Boolean(errors.blockName)}
-                  helperText={errors.blockName && 'Block name is required'}
+                  error={Boolean(errors.registrationBlockName)}
+                  helperText={errors.registrationBlockName && 'Block name is required'}
                   {...field}
                 />
               )}
@@ -168,7 +169,7 @@ const Location = (props) => {
           </ListItem>
           <ListItem>
             <Controller
-              name='structureLocationZone'
+              name='registrationStructureZone'
               control={control}
               defaultValue=''
               rules={{
@@ -176,15 +177,15 @@ const Location = (props) => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='structureLocationZone'
+                  id='registrationStructureZone'
                   label='Select Structure Location Zone'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.structureLocationZone)}
+                  error={Boolean(errors.registrationStructureZone)}
                   helperText={
-                    errors.structureLocationZone &&
+                    errors.registrationStructureZone &&
                     'Structure Location Zone is required'
                   }
                   {...field}

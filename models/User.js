@@ -31,6 +31,7 @@ const UserSchema = new mongoose.Schema(
     roles: {
       type: [String],
     },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },
   {
     timestamps: true,

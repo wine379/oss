@@ -19,6 +19,14 @@ import CheckoutWizard from '../../components/dashboard/CheckoutWizard';
 
 const Payment = () => {
   const { state, dispatch } = useContext(Store);
+  const {
+    userInfo,
+    dashboardTechnologyChoice,
+    dashboardPaymentDetails,
+  } = state;
+  const {registrationPaymentOption, registrationWillPayInFull} = dashboardPaymentDetails;
+
+
   const paymentOptions = [
     'Bank transfer',
     'Bank deposit',
@@ -35,47 +43,43 @@ const Payment = () => {
     setValue,
   } = useForm();
 
-  const {
-    userInfo,
-    cart: { paymentMethod, location },
-  } = state;
+  
   const router = useRouter();
 
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
     dispatch({
       type: 'SET_DASHBOARD_TITLE',
-      payload: 'Enrollment',
+      payload: 'Enrollment | registration',
     });
     // if (!userInfo) {
     //   router.push('/login?redirect=/payment');
     // }
-    // if (!location) {
-    //   router.push('/location');
-    // }
-    setValue('paymentOption', paymentMethod.paymentOption);
-    setValue('willPayFullForOSS', paymentMethod.willPayFullForOSS);
+    if (!dashboardTechnologyChoice) {
+      router.push('/dashboard/choosetechnology');
+    }
+    setValue('registrationPaymentOption', dashboardPaymentDetails.registrationPaymentOption);
+    setValue('registrationWillPayInFull', dashboardPaymentDetails.registrationWillPayInFull);
   }, []);
 
   const classes = useStyles();
 
-  
+  const submitHandler = ({ registrationPaymentOption, registrationWillPayInFull }) => {
 
-  const submitHandler = () => {
+    
+    dispatch({
+      type: 'SAVE_DASHBOARD_REGISTRATION_PAYMENT_DETAILS',
+      payload: { registrationPaymentOption, registrationWillPayInFull },
+    });
+    Cookies.set(
+      'dashboardPaymentDetails',
+      JSON.stringify({ registrationPaymentOption, registrationWillPayInFull  })
+    );
+
     router.push('/dashboard/enrollhousehold');
-  }
+  };
 
-  // const submitHandler = ({ paymentOption, willPayFullForOSS }) => {
-  //   dispatch({
-  //     type: 'SAVE_PAYMENT_METHOD',
-  //     payload: { paymentOption, willPayFullForOSS },
-  //   });
-  //   Cookies.set(
-  //     'paymentMethod',
-  //     JSON.stringify({ paymentOption, willPayFullForOSS })
-  //   );
-  //   router.push('/placeorder');
-  // };
+
 
   return (
     <Layout title='Payment details'>
@@ -88,7 +92,7 @@ const Payment = () => {
         <List>
           <ListItem>
             <Controller
-              name='paymentOption'
+              name='registrationPaymentOption'
               control={control}
               defaultValue=''
               rules={{
@@ -96,15 +100,15 @@ const Payment = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='paymentOption'
+                  id='registrationPaymentOption'
                   label='Select Payment Option'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.paymentOption)}
+                  error={Boolean(errors.registrationPaymentOption)}
                   helperText={
-                    errors.paymentOption && 'Payment Option is required'
+                    errors.registrationPaymentOption && 'Payment Option is required'
                   }
                   {...field}
                 >
@@ -119,7 +123,7 @@ const Payment = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='willPayFullForOSS'
+              name='registrationWillPayInFull'
               control={control}
               defaultValue=''
               rules={{
@@ -127,15 +131,15 @@ const Payment = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='willPayFullForOSS'
+                  id='registrationWillPayInFull'
                   label='Will pay full for OSS service?'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.paymentOption)}
+                  error={Boolean(errors.registrationWillPayInFull)}
                   helperText={
-                    errors.paymentOption && 'Payment Option is required'
+                    errors.registrationWillPayInFull && 'Payment Option is required'
                   }
                   {...field}
                 >

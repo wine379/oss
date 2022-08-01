@@ -7,23 +7,42 @@ const initialState = {
   darkMode: Cookies.get('darkMode') === 'ON' ? true : false,
   dashboardTitle: Cookies.get('darkMode'),
   showHeroImage: false,
+
+  dashboardHouseholdHeadDetails: Cookies.get('dashboardHouseholdHeadDetails') ? JSON.parse(Cookies.get('dashboardHouseholdHeadDetails')) : '',
+  dashboardHouseholdDetails: Cookies.get('dashboardHouseholdDetails') ? JSON.parse(Cookies.get('dashboardHouseholdDetails')) : '',
+  dashboardLocationDetails: Cookies.get('dashboardLocationDetails') ? JSON.parse(Cookies.get('dashboardLocationDetails')) : '',
+  dashboardTechnologyChoice: Cookies.get('dashboardTechnologyChoice') ? JSON.parse(Cookies.get('dashboardTechnologyChoice')) : '',
+  dashboardPaymentDetails: Cookies.get('dashboardPaymentDetails') ? JSON.parse(Cookies.get('dashboardPaymentDetails')) : '',
+
+  // registrationFirstName: Cookies.get('registrationFirstName') ? JSON.parse(Cookies.get('registrationFirstName')) : '',
+  // registrationLastName: Cookies.get('registrationLastName') ? JSON.parse(Cookies.get('registrationLastName')) : '',
+  // registrationDateOfBirth: Cookies.get('registrationDateOfBirth') ? JSON.parse(Cookies.get('registrationDateOfBirth')) : '',
+  // registrationPhone: Cookies.get('registrationPhone') ? JSON.parse(Cookies.get('registrationPhone')) : '',
+  // registrationNationalID: Cookies.get('registrationNationalID') ? JSON.parse(Cookies.get('registrationNationalID')) : '',
+  // registrationEmail: Cookies.get('registrationEmail') ? JSON.parse(Cookies.get('registrationEmail')) : '',
+  // registrationPassword: Cookies.get('registrationPassword') ? JSON.parse(Cookies.get('registrationPassword')) : '',
+  // registrationConfirmPassword: Cookies.get('registrationConfirmPassword') ? JSON.parse(Cookies.get('registrationConfirmPassword'))  : '',
+  // registrationHouseholdName: Cookies.get('registrationHouseholdName') ? JSON.parse(Cookies.get('registrationHouseholdName'))  : '',
+  // registrationPlotNumber: Cookies.get('registrationPlotNumber') ? JSON.parse(Cookies.get('registrationPlotNumber'))  : '',
+  // registrationLatrineType: Cookies.get('registrationLatrineType') ? JSON.parse(Cookies.get('registrationLatrineType')) : '',
+  // registrationIncomeRange: Cookies.get('registrationIncomeRange') ? JSON.parse(Cookies.get('registrationIncomeRange')) : '',
+  // registrationPovertyStatus: Cookies.get('registrationPovertyStatus') ? JSON.parse(Cookies.get('registrationPovertyStatus')) : '',
+  // registrationSourceOfLivelihood: Cookies.get('registrationSourceOfLivelihood') ? JSON.parse(Cookies.get('registrationSourceOfLivelihood')) : '',
+  // registrationVulnerabilityStatus: Cookies.get('registrationVulnerabilityStatus') ? JSON.parse(Cookies.get('registrationVulnerabilityStatus')) : '',
+  // registrationArea: Cookies.get('registrationArea') ? JSON.parse(Cookies.get('registrationArea')) : '',
+  // registrationWard: Cookies.get('registrationWard') ? JSON.parse(Cookies.get('registrationWard')) : '',
+  // registrationBlockName: Cookies.get('registrationBlockName') ? JSON.parse(Cookies.get('registrationBlockName')) : '',
+  // registrationStructureZone: Cookies.get('registrationStructureZone') ? JSON.parse(Cookies.get('registrationStructureZone')) : '',
+  // registrationProduct: Cookies.get('registrationProduct') ? JSON.parse(Cookies.get('registrationProduct')) : '',
+  // registrationPaymentOption: Cookies.get('registrationPaymentOption') ? JSON.parse(Cookies.get('registrationPaymentOption')) : '',
+  // registrationWillPayInFull: Cookies.get('registrationWillPayInFull') ? JSON.parse(Cookies.get('registrationWillPayInFull')) : '',
   cart: {
-    cartItems: Cookies.get('cartItems')
-      ? JSON.parse(Cookies.get('cartItems'))
-      : [],
-    householdDetails: Cookies.get('householdDetails')
-      ? JSON.parse(Cookies.get('householdDetails'))
-      : {},
-    location: Cookies.get('location')
-      ? JSON.parse(Cookies.get('location'))
-      : {},
-    paymentMethod: Cookies.get('paymentMethod')
-      ? JSON.parse(Cookies.get('paymentMethod'))
-      : {},
+    cartItems: Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : [],
+    householdDetails: Cookies.get('householdDetails') ? JSON.parse(Cookies.get('householdDetails')) : '',
+    location: Cookies.get('location') ? JSON.parse(Cookies.get('location')) : '',
+    paymentMethod: Cookies.get('paymentMethod')  ? JSON.parse(Cookies.get('paymentMethod')) : '',
   },
-  userInfo: Cookies.get('userInfo')
-    ? JSON.parse(Cookies.get('userInfo'))
-    : null,
+  userInfo: Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : null,
 };
 
 function reducer(state, action) {
@@ -106,7 +125,7 @@ function reducer(state, action) {
       return {
         ...state,
         userInfo: null,
-        cart: { cartItems: [], shippingAddress: {}, paymentMethod: '' },
+        cart: { cartItems: [], shippingAddress: '', paymentMethod: '' },
       };
 
     case 'SAVE_HOUSEHOLD_DETAILS':
@@ -187,6 +206,32 @@ function reducer(state, action) {
       return { ...state, loadingPay: false, successPay: false, errorPay: '' };
     case 'SET_ORDER_ITEMS':
       return { ...state, orderItems: action.payload };
+    case 'SAVE_DASHBOARD_HOUSEHOLD_HEAD_DETAILS':
+      return {
+        ...state,
+        dashboardHouseholdHeadDetails: action.payload,
+      };
+      case 'SAVE_DASHBOARD_HOUSEHOLD_DETAILS':
+      return {
+        ...state,
+        dashboardHouseholdDetails: action.payload,
+      };
+      case 'SAVE_DASHBOARD_HOUSEHOLD_LOCATION_DETAILS':
+      return {
+        ...state,
+        dashboardLocationDetails: action.payload,
+      };
+      case 'SAVE_DASHBOARD_TECHNOLOGY_CHOICE_DETAILS':
+      return {
+        ...state,
+        dashboardTechnologyChoice: action.payload,
+      };
+      case 'SAVE_DASHBOARD_REGISTRATION_PAYMENT_DETAILS':
+      return {
+        ...state,
+        dashboardPaymentDetails: action.payload,
+      };
+      
     default:
       return state;
   }

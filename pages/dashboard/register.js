@@ -29,10 +29,21 @@ const Register = () => {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { state, dispatch } = useContext(Store);
-  const { userInfo } = state;
+  const { userInfo, dashboardHouseholdHeadDetails } = state;
+  const { 
+    registrationFirstName,
+	  registrationLastName,
+	  registrationDateOfBirth,
+   	registrationPhone,
+    registrationNationalID,
+    registrationEmail,
+    registrationPassword,
+    registrationConfirmPassword,
+    } = dashboardHouseholdHeadDetails
   const router = useRouter();
   const { redirect } = router.query;
 
@@ -40,53 +51,60 @@ const Register = () => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
     dispatch({
       type: 'SET_DASHBOARD_TITLE',
-      payload: 'Enrollment',
+      payload: 'Enrollment | registration',
     });
     // if (userInfo) {
     //   router.push('/');
     // }
+    setValue('registrationFirstName', dashboardHouseholdHeadDetails.registrationFirstName);
+    setValue('registrationLastName', dashboardHouseholdHeadDetails.registrationLastName);
+    setValue('registrationDateOfBirth', dashboardHouseholdHeadDetails.registrationDateOfBirth);
+    setValue('registrationPhone', dashboardHouseholdHeadDetails.registrationPhone);
+    setValue('registrationNationalID', dashboardHouseholdHeadDetails.registrationNationalID );
+    setValue('registrationEmail', dashboardHouseholdHeadDetails.registrationEmail);
+    setValue('registrationPassword', dashboardHouseholdHeadDetails.registrationPassword);
+    setValue('registrationConfirmPassword', dashboardHouseholdHeadDetails.registrationConfirmPassword);
   }, []);
 
   const classes = useStyle();
-  const submitHandler = () => {
-    router.push(redirect || '/dashboard/household');
-  }
-  // const submitHandler = async ({
-  //   firstName,
-  //   lastName,
-  //   nationalID,
-  //   dateOfBirth,
-  //   phone,
-  //   email,
-  //   password,
-  //   confirmPassword,
-  // }) => {
-  //   closeSnackbar();
-  //   if (password !== confirmPassword) {
-  //     enqueueSnackbar('Passwords do not match', { variant: 'error' });
-  //     return;
-  //   }
-  //   try {
-  //     const { data } = await axios.post('/api/users/register', {
-  //       firstName,
-  //       lastName,
-  //       dateOfBirth,
-  //       phone,
-  //       nationalID,
-  //       email,
-  //       password,
-  //     });
-
-
-  //     dispatch({ type: 'USER_LOGIN', payload: data });
-  //     Cookies.set('userInfo', JSON.stringify(data));
-  //     router.push(redirect || '/cart');
-  //   } catch (e) {
-  //     enqueueSnackbar(e.response.data ? e.response.data.message : e.message, {
-  //       variant: 'error',
-  //     });
-  //   }
-  // };
+  const submitHandler = ({
+    registrationFirstName,
+	  registrationLastName,
+	  registrationDateOfBirth,
+   	registrationPhone,
+    registrationNationalID,
+    registrationEmail,
+    registrationPassword,
+    registrationConfirmPassword, 
+  }) => {
+    dispatch({
+      type: 'SAVE_DASHBOARD_HOUSEHOLD_HEAD_DETAILS',
+      payload: { 
+        registrationFirstName,
+        registrationLastName,
+        registrationDateOfBirth,
+        registrationPhone,
+        registrationNationalID,
+        registrationEmail,
+        registrationPassword,
+        registrationConfirmPassword
+      },
+    });
+    Cookies.set(
+      'dashboardHouseholdHeadDetails',
+      JSON.stringify({ 
+        registrationFirstName,
+        registrationLastName,
+        registrationDateOfBirth,
+        registrationPhone,
+        registrationNationalID,
+        registrationEmail,
+        registrationPassword,
+        registrationConfirmPassword
+      })
+    );
+    router.push('/dashboard/household');
+  };
 
 
   return (
@@ -97,7 +115,7 @@ const Register = () => {
         <List>
           <ListItem>
             <Controller
-              name='firstName'
+              name='registrationFirstName'
               control={control}
               defaultValue=''
               rules={{
@@ -106,16 +124,16 @@ const Register = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='firstName'
+                  id='registrationFirstName'
                   label='First name'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   on
                   fullWidth
-                  error={Boolean(errors.firstName)}
+                  error={Boolean(errors.registrationFirstName)}
                   helperText={
-                    errors.firstName
-                      ? errors.firstName.type === 'minLength'
+                    errors.registrationFirstName
+                      ? errors.registrationFirstName.type === 'minLength'
                         ? 'First name should have at least 2 characters'
                         : 'First name is required'
                       : ''
@@ -127,7 +145,7 @@ const Register = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='lastName'
+              name='registrationLastName'
               control={control}
               defaultValue=''
               rules={{
@@ -136,15 +154,15 @@ const Register = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='lastName'
+                  id='registrationLastName'
                   label='Last name'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
-                  error={Boolean(errors.lastName)}
+                  error={Boolean(errors.registrationLastName)}
                   helperText={
-                    errors.lastName
-                      ? errors.lastName.type === 'minLength'
+                    errors.registrationLastName
+                      ? errors.registrationLastName.type === 'minLength'
                         ? 'Last name should have at least 2 characters'
                         : 'Last name is required'
                       : ''
@@ -157,7 +175,7 @@ const Register = () => {
           <ListItem>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Controller
-                name='dateOfBirth'
+                name='registrationDateOfBirth'
                 control={control}
                 defaultValue={null}
                 render={({
@@ -191,7 +209,7 @@ const Register = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='phone'
+              name='registrationPhone'
               control={control}
               defaultValue=''
               rules={{
@@ -201,15 +219,15 @@ const Register = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='phone'
+                  id='registrationPhone'
                   label='Phone number (eg +265123456789)'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
-                  error={Boolean(errors.phone)}
+                  error={Boolean(errors.registrationPhone)}
                   helperText={
-                    errors.phone
-                      ? errors.phone.type === 'minLength'
+                    errors.registrationPhone
+                      ? errors.registrationPhone.type === 'minLength'
                         ? 'Phone number should have at least 10 characters'
                         : 'Phone number is required'
                       : ''
@@ -221,7 +239,7 @@ const Register = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='nationalID'
+              name='registrationNationalID'
               control={control}
               defaultValue=''
               rules={{
@@ -231,15 +249,15 @@ const Register = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='nationalID'
+                  id='registrationNationalID'
                   label='National ID (eg XGF5THY4)'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
-                  error={Boolean(errors.nationalID)}
+                  error={Boolean(errors.registrationNationalID)}
                   helperText={
-                    errors.nationalID
-                      ? errors.nationalID.type === 'minLength'
+                    errors.registrationNationalID
+                      ? errors.registrationNationalID.type === 'minLength'
                         ? 'National ID should have at least 10 characters'
                         : 'National ID is required'
                       : ''
@@ -251,7 +269,7 @@ const Register = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='email'
+              name='registrationEmail'
               control={control}
               defaultValue=''
               rules={{
@@ -260,15 +278,15 @@ const Register = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='email'
+                  id='registrationEmail'
                   label='Email'
                   variant='outlined'
                   inputProps={{ type: 'email' }}
                   fullWidth
-                  error={Boolean(errors.email)}
+                  error={Boolean(errors.registrationEmail)}
                   helperText={
-                    errors.email
-                      ? errors.email.type === 'pattern'
+                    errors.registrationEmail
+                      ? errors.registrationEmail.type === 'pattern'
                         ? 'Email is invalid'
                         : 'Email is required'
                       : ''
@@ -280,7 +298,7 @@ const Register = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='password'
+              name='registrationPassword'
               control={control}
               defaultValue=''
               rules={{
@@ -289,15 +307,15 @@ const Register = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='password'
+                  id='registrationPassword'
                   label='Password'
                   variant='outlined'
                   inputProps={{ type: 'password' }}
                   fullWidth
-                  error={Boolean(errors.password)}
+                  error={Boolean(errors.registrationPassword)}
                   helperText={
-                    errors.password
-                      ? errors.password.type === 'minLength'
+                    errors.registrationPassword
+                      ? errors.registrationPassword.type === 'minLength'
                         ? 'Password should have at least 8 characters'
                         : 'Password is required'
                       : ''
@@ -309,7 +327,7 @@ const Register = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='confirmPassword'
+              name='registrationConfirmPassword'
               control={control}
               defaultValue=''
               rules={{
@@ -318,15 +336,15 @@ const Register = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='confirmPassword'
+                  id='registrationConfirmPassword'
                   label='ConfirmPassword'
                   variant='outlined'
                   inputProps={{ type: 'password' }}
                   fullWidth
-                  error={Boolean(errors.confirmPassword)}
+                  error={Boolean(errors.registrationConfirmPassword)}
                   helperText={
-                    errors.confirmPassword
-                      ? errors.confirmPassword.type === 'minLength'
+                    errors.registrationConfirmPassword
+                      ? errors.registrationConfirmPassword.type === 'minLength'
                         ? 'Confirm password should have at least 8 characters'
                         : 'Confirm password is required'
                       : ''

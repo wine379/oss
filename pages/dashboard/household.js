@@ -38,76 +38,86 @@ const Household = () => {
   ];
   const {
     userInfo,
-    cart: { householdDetails },
+    dashboardHouseholdHeadDetails,
+    dashboardHouseholdDetails,
   } = state;
+
+  const {
+    registrationHouseholdName,
+    registrationPlotNumber,
+    registrationHomeOwnershipStatus,
+    registrationLatrineType,
+    registrationIncomeRange,
+    registrationSourceOfLivelihood,
+    registrationPovertyStatus,
+    registrationVulnerabilityStatus
+  } = dashboardHouseholdDetails;
+
   const router = useRouter();
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
     dispatch({
       type: 'SET_DASHBOARD_TITLE',
-      payload: 'Enrollment',
+      payload: 'Enrollment | registration',
     });
     // if (!userInfo) {
     //   router.push('/login?redirect=/household');
     // }
-    setValue('name', householdDetails.name);
-    setValue('plotNumber', householdDetails.plotNumber);
-    setValue('homeOwnershipStatus', householdDetails.homeOwnershipStatus);
-    setValue('currentLatrineType', householdDetails.currentLatrineType);
-    setValue(
-      'avarageMonthlyIncomeRange',
-      householdDetails.avarageMonthlyIncomeRange
-    );
-    setValue('mainSourceOfLiving', householdDetails.mainSourceOfLiving);
-    setValue('isPoor', householdDetails.isPoor);
-    setValue('isVulnerable', householdDetails.isVulnerable);
+    
+    if (!dashboardHouseholdHeadDetails) {
+      router.push('/dashboard/register');
+    }
+
+    setValue('registrationHouseholdName', dashboardHouseholdDetails.registrationHouseholdName);
+    setValue('registrationPlotNumber', dashboardHouseholdDetails.registrationPlotNumber);
+    setValue('registrationHomeOwnershipStatus', dashboardHouseholdDetails.registrationHomeOwnershipStatus);
+    setValue('registrationLatrineType', dashboardHouseholdDetails.registrationLatrineType);
+    setValue('registrationIncomeRange', dashboardHouseholdDetails.registrationIncomeRange );
+    setValue('registrationSourceOfLivelihood', dashboardHouseholdDetails.registrationSourceOfLivelihood);
+    setValue('registrationPovertyStatus', dashboardHouseholdDetails.registrationPovertyStatus);
+    setValue('registrationVulnerabilityStatus', dashboardHouseholdDetails.registrationVulnerabilityStatus);
   }, []);
 
   const classes = useStyles();
-
-  const submitHandler = () => {
-    router.push('/dashboard/location');
-  }
-
   
-  // const submitHandler = ({
-  //   name,
-  //   plotNumber,
-  //   homeOwnershipStatus,
-  //   currentLatrineType,
-  //   avarageMonthlyIncomeRange,
-  //   mainSourceOfLiving,
-  //   isPoor,
-  //   isVulnerable,
-  // }) => {
-  //   dispatch({
-  //     type: 'SAVE_HOUSEHOLD_DETAILS',
-  //     payload: {
-  //       name,
-  //       plotNumber,
-  //       homeOwnershipStatus,
-  //       currentLatrineType,
-  //       avarageMonthlyIncomeRange,
-  //       mainSourceOfLiving,
-  //       isPoor,
-  //       isVulnerable,
-  //     },
-  //   });
-  //   Cookies.set(
-  //     'householdDetails',
-  //     JSON.stringify({
-  //       name,
-  //       plotNumber,
-  //       homeOwnershipStatus,
-  //       currentLatrineType,
-  //       avarageMonthlyIncomeRange,
-  //       mainSourceOfLiving,
-  //       isPoor,
-  //       isVulnerable,
-  //     })
-  //   );
-  //   router.push('/location');
-  // };
+  const submitHandler = ({
+    registrationHouseholdName,
+    registrationPlotNumber,
+    registrationHomeOwnershipStatus,
+    registrationLatrineType,
+    registrationIncomeRange,
+    registrationSourceOfLivelihood,
+    registrationPovertyStatus,
+    registrationVulnerabilityStatus,
+  }) => {
+    dispatch({
+      type: 'SAVE_DASHBOARD_HOUSEHOLD_DETAILS',
+      payload: {
+        registrationHouseholdName,
+        registrationPlotNumber,
+        registrationHomeOwnershipStatus,
+        registrationLatrineType,
+        registrationIncomeRange,
+        registrationSourceOfLivelihood,
+        registrationPovertyStatus,
+        registrationVulnerabilityStatus,
+      },
+    });
+    Cookies.set(
+      'dashboardHouseholdDetails',
+      JSON.stringify({
+        registrationHouseholdName,
+        registrationPlotNumber,
+        registrationHomeOwnershipStatus,
+        registrationLatrineType,
+        registrationIncomeRange,
+        registrationSourceOfLivelihood,
+        registrationPovertyStatus,
+        registrationVulnerabilityStatus,
+      })
+    );
+    router.push('/dashboard/location');
+  };
 
   return (
     <Layout title='Household details'>
@@ -117,24 +127,23 @@ const Household = () => {
         <List>
           <ListItem>
             <Controller
-              name='name'
+              name='registrationHouseholdName'
               control={control}
-              defaultValue=''
               rules={{
                 required: true,
                 minLength: 3,
               }}
               render={({ field }) => (
                 <TextField
-                  id='name'
+                  id='registrationHouseholdName'
                   label='Household name (eg. The Bandas)'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
-                  error={Boolean(errors.name)}
+                  error={Boolean(errors.registrationHouseholdName)}
                   helperText={
-                    errors.name
-                      ? errors.name.type === 'minLength'
+                    errors.registrationHouseholdName
+                      ? errors.registrationHouseholdName.type === 'minLength'
                         ? 'Household name should have at least 3 characters'
                         : 'Household name is required'
                       : ''
@@ -146,7 +155,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='plotNumber'
+              name='registrationPlotNumber'
               control={control}
               defaultValue=''
               rules={{
@@ -155,14 +164,14 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='plotNumber'
+                  id='registrationPlotNumber'
                   label='Plot number'
                   variant='outlined'
                   fullWidth
-                  error={Boolean(errors.plotNumber)}
+                  error={Boolean(errors.registrationPlotNumber)}
                   helperText={
-                    errors.plotNumber
-                      ? errors.plotNumber.type === 'minLength'
+                    errors.registrationPlotNumber
+                      ? errors.registrationPlotNumber.type === 'minLength'
                         ? 'Plot number should have at least 2 characters'
                         : 'Plot number is required'
                       : ''
@@ -174,7 +183,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='homeOwnershipStatus'
+              name='registrationHomeOwnershipStatus'
               control={control}
               defaultValue=''
               rules={{
@@ -182,15 +191,15 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='homeOwnershipStatus'
+                  id='registrationHomeOwnershipStatus'
                   label='Select home ownership status'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.homeOwnershipStatus)}
+                  error={Boolean(errors.registrationHomeOwnershipStatus)}
                   helperText={
-                    errors.homeOwnershipStatus &&
+                    errors.registrationHomeOwnershipStatus &&
                     'Home ownership status is required'
                   }
                   {...field}
@@ -213,7 +222,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='currentLatrineType'
+              name='registrationLatrineType'
               control={control}
               defaultValue=''
               rules={{
@@ -221,15 +230,15 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='currentLatrineType'
+                  id='registrationLatrineType'
                   label='Select current household latrine type'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.currentLatrineType)}
+                  error={Boolean(errors.registrationLatrineType)}
                   helperText={
-                    errors.currentLatrineType &&
+                    errors.registrationLatrineType &&
                     'Current household currentLatrineType type is required'
                   }
                   {...field}
@@ -252,7 +261,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='avarageMonthlyIncomeRange'
+              name='registrationIncomeRange'
               control={control}
               defaultValue=''
               rules={{
@@ -260,15 +269,15 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='avarageMonthlyIncomeRange'
+                  id='registrationIncomeRange'
                   label='Select avarage monthly income range'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.avarageMonthlyIncomeRange)}
+                  error={Boolean(errors.registrationIncomeRange)}
                   helperText={
-                    errors.avarageMonthlyIncomeRange &&
+                    errors.registrationIncomeRange &&
                     'Avarage monthly income range is required'
                   }
                   {...field}
@@ -286,7 +295,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='isPoor'
+              name='registrationPovertyStatus'
               control={control}
               defaultValue=''
               rules={{
@@ -294,14 +303,14 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='isPoor'
+                  id='registrationPovertyStatus'
                   label='Is household poor?'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.isPoor)}
-                  helperText={errors.isPoor && 'Is household poor? is required'}
+                  error={Boolean(errors.registrationPovertyStatus)}
+                  helperText={errors.registrationPovertyStatus && 'Is household poor? is required'}
                   {...field}
                 >
                   <MenuItem value='Yes'>YES</MenuItem>
@@ -312,7 +321,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='mainSourceOfLiving'
+              name='registrationSourceOfLivelihood'
               control={control}
               defaultValue=''
               rules={{
@@ -320,15 +329,15 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='mainSourceOfLiving'
+                  id='registrationSourceOfLivelihood'
                   label='Select main source of living'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.mainSourceOfLiving)}
+                  error={Boolean(errors.registrationSourceOfLivelihood)}
                   helperText={
-                    errors.mainSourceOfLiving &&
+                    errors.registrationSourceOfLivelihood &&
                     'Structure Location Zone is required'
                   }
                   {...field}
@@ -347,7 +356,7 @@ const Household = () => {
           </ListItem>
           <ListItem>
             <Controller
-              name='isVulnerable'
+              name='registrationVulnerabilityStatus'
               control={control}
               defaultValue=''
               rules={{
@@ -355,15 +364,15 @@ const Household = () => {
               }}
               render={({ field }) => (
                 <TextField
-                  id='isVulnerable'
+                  id='registrationVulnerabilityStatus'
                   label='Is household vulnerable?'
                   variant='outlined'
                   inputProps={{ type: 'text' }}
                   fullWidth
                   select
-                  error={Boolean(errors.isVulnerable)}
+                  error={Boolean(errors.registrationVulnerabilityStatus)}
                   helperText={
-                    errors.isVulnerable &&
+                    errors.registrationVulnerabilityStatus &&
                     'Is household vulnerable? is required'
                   }
                   {...field}

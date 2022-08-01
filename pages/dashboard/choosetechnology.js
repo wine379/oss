@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
 import useRouter from 'next/router';
+import Cookies from 'js-cookie';
 import {
   Button,
   Card,
@@ -23,12 +24,28 @@ import CheckoutWizard from '../../components/dashboard/CheckoutWizard';
 
 const ChooseTechnology = (props) => {
   const { state, dispatch } = useContext(Store);
+  const {
+    userInfo,
+    dashboardLocationDetails,
+    dashboardTechnologyChoice,
+  } = state;
+
+  const {
+    registrationProduct,
+  } = dashboardTechnologyChoice;
+
   useEffect(() => {
     dispatch({ type: 'HERO_IMAGE_OFF' });
     dispatch({
       type: 'SET_DASHBOARD_TITLE',
-      payload: 'Enrollment',
+      payload: 'Enrollment | registration',
     });
+    // if (!userInfo) {
+    //   router.push('/login?redirect=/location');
+    // }
+    if (!dashboardLocationDetails) {
+      router.push('/dashboard/location');
+    }
   }, []);
 
   const classes = useStyles();
@@ -37,18 +54,13 @@ const ChooseTechnology = (props) => {
   const router = useRouter;
 
   const addToCartHandler = async (product) => {
-    const existItem = state.cart.cartItems.find((x) => x._id === product._id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
+    dispatch({ type: 'SAVE_DASHBOARD_TECHNOLOGY_CHOICE_DETAILS', payload: { ...product } });
+    Cookies.set(
+      'dashboardTechnologyChoice',
+      JSON.stringify({ ...product  })
+    );
 
-    const { data } = await axios.get(`/api/products/${product._id}`);
-
-    if (data.maximumQuantityAllowedPerOrder < quantity) {
-      window.alert('Sorry, you cannot add more than 3 items of this product');
-      return;
-    }
-
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
-    router.push('/cart');
+    router.push('/dashboard/payment');
   };
 
   let dollarUSLocale = Intl.NumberFormat('en-US');
@@ -61,14 +73,13 @@ const ChooseTechnology = (props) => {
         <List>
           <ListItem>
             <br />
-            <Typography component={'h3'} variant={'h4'} color={'primary'} >Click technology image to continue...</Typography>
+            <Typography component={'h3'} variant={'h4'} color={'primary'} >Click <strong>"Choose technology "</strong> button to continue...</Typography>
           </ListItem>
           <ListItem>
             <Grid container spacing={3}>
               {products.map((product) => (
                 <Grid item md={4} key={product.name}>
                   <Card>
-                    <NextLink href={'/dashboard/payment'} passHref>
                       <CardActionArea>
                         <CardMedia
                           component='img'
@@ -79,19 +90,20 @@ const ChooseTechnology = (props) => {
                           <Typography>{product.name}</Typography>
                         </CardContent>
                       </CardActionArea>
-                    </NextLink>
                     <CardActions>
                       <Typography>
                         MWK{dollarUSLocale.format(product.price)}
                       </Typography>
-                      {/* <Button
-                    size='small'
-                    color='primary'
-                    onClick={() => addToCartHandler(product)}
-                  >
-                    Add to cart
-                  </Button> */}
                     </CardActions>
+                    <Button
+                      variant='contained'
+                      size='small'
+                      color='primary'
+                      fullWidth
+                      onClick={() => addToCartHandler(product)}
+                    >
+                      Choose technology
+                    </Button>
                   </Card>
                 </Grid>
               ))}

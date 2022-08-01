@@ -17,32 +17,29 @@ handler.post(async (req, res) => {
   const blockName = req.body.blockName
   const code = req.body.code
   const currentLatrineType = req.body.currentLatrineType
-  const enrollmentStatus = req.body.enrollmentStatus
   const homeOwnershipStatus = req.body.homeOwnershipStatus
   const isPoor = req.body.isPoor
   const isVulnerable = req.body.isVulnerable
   const mainSourceOfLiving = req.body.mainSourceOfLiving
   const name = req.body.name
-  const order = req.body.order
   const plotNumber = req.body.plotNumber
   const structureLocationZone = req.body.structureLocationZone
   const ward = req.body.ward
   
   await db.connect();
   const newHousehold = new Household({
+    householdHead,
     adminNotes,
     area,
     avarageMonthlyIncomeRange,
     blockName,
     code,
     currentLatrineType,
-    enrollmentStatus,
     homeOwnershipStatus,
     isPoor,
     isVulnerable,
     mainSourceOfLiving,
     name,
-    order,
     plotNumber,
     structureLocationZone,
     ward,

@@ -26,7 +26,10 @@ handler.post(async (req, res) => {
     orderStatus,
     paymentOption,
     willPayFullForOSS,
-    user: req.user._id,
+    product,
+    household,
+    createdBy: req.user._id,
+    isDelivered,
   });
   const order = await newOrder.save();
   await db.disconnect();

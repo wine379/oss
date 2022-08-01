@@ -6,10 +6,6 @@ const HouseholdSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    enrollmentStatus: {
-      type: String,
-      required: true,
-    },
     adminNotes: {
       type: String,
       required: true,
@@ -54,8 +50,8 @@ const HouseholdSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
+    householdHead: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    crearedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
     ward: { type: mongoose.Schema.Types.ObjectId, ref: 'Ward' },
   },

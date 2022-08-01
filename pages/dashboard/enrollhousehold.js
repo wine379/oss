@@ -38,38 +38,30 @@ import axios from 'axios';
 
 
 
-const extractOrderItems = (items) => {
-  let orderItemsArray = [];
-
-  items.map((item) => {
-    const productId = item._id
-    const quantity = item.quantity
-
-    orderItemsArray.push({ productId, quantity });
-  })
-
-  return orderItemsArray;
-}
-
-
 const PlaceOrder = (props) => {
   const { state, dispatch } = useContext(Store);
+  const {
+    userInfo,
+    dashboardHouseholdHeadDetails,
+    dashboardHouseholdDetails,
+    dashboardLocationDetails,
+    dashboardTechnologyChoice,
+    dashboardPaymentDetails,
+  } = state;
+
+  const technologyOfChoice = dashboardTechnologyChoice;
   
   const { areas, wards } = props;
     const router = useRouter();
     const classes = useStyles();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const {
-      userInfo,
-      cart: { cartItems, householdDetails, location, paymentMethod },
-    } = state;
 
     useEffect(
       () => {
         dispatch({ type: 'HERO_IMAGE_OFF' });
         dispatch({
           type: 'SET_DASHBOARD_TITLE',
-          payload: 'Enrollment',
+          payload: 'Enrollment | registration',
         }); 
         // if (!userInfo) {
         //   router.push('/login?redirect=/payment');
@@ -87,7 +79,7 @@ const PlaceOrder = (props) => {
         //   router.push('/cart');
         // }
       },
-      [householdDetails, paymentMethod, cartItems]
+      []
     );
 
     const dateNow = new Date();
@@ -102,55 +94,60 @@ const PlaceOrder = (props) => {
     const suffix = genRanHex(1);
     const householdCode = `${householdPrefix}${hexadicmalMilliseconds}${suffix}`;
     const orderNumber = `${orderPrefix}${hexadicmalMilliseconds}${suffix}`;
-    const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
 
-    const itemsPrice = round2(
-      cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
-    );
+    // const createdBy = userInfo._id
 
     
 
     const [loading, setLoading] = useState(false);
 
     const createHousehold = async ({
+      firstName,
+      lastName,
+      email,
+      dateOfBirth,
+      nationalID,
+      phone,
+      password,
+
       adminNotes,
       area,
       avarageMonthlyIncomeRange,
       blockName,
       code,
       currentLatrineType,
-      enrollmentStatus,
       homeOwnershipStatus,
       isPoor,
       isVulnerable,
       mainSourceOfLiving,
       name,
-      order,
       plotNumber,
       structureLocationZone,
-      ward,
+      ward: registrationWard,
+
+      orderNumber,
       willPayFullForOSS,
+      paymentOption,
+      orderStatus,
+      product,
+      createdBy,
+      isDelivered,
+
+
+      // createdBy: userInfo._id,
+
     }) => {
-      const { data } = await axios.post(
-        '/api/households/create',
+      const { householdHeadData } = await axios.post(
+        '/api/users/register',
         {
-          adminNotes,
-          area,
-          avarageMonthlyIncomeRange,
-          blockName,
-          code,
-          currentLatrineType,
-          enrollmentStatus,
-          homeOwnershipStatus,
-          isPoor,
-          isVulnerable,
-          mainSourceOfLiving,
-          name,
-          order,
-          plotNumber,
-          structureLocationZone,
-          ward,
-          willPayFullForOSS,
+          firstName,
+          lastName,
+          email,
+          dateOfBirth,
+          nationalID,
+          phone,
+          password,
+          // createdBy
         },
         {
           headers: {
@@ -159,15 +156,63 @@ const PlaceOrder = (props) => {
         }
       );
 
-      return data;
+      const { householdData } = await axios.post(
+        '/api/households/create',
+        {
+          householdHead: householdHeadData._id,
+
+          adminNotes,
+          area,
+          avarageMonthlyIncomeRange,
+          blockName,
+          code,
+          currentLatrineType,
+          homeOwnershipStatus,
+          isPoor,
+          isVulnerable,
+          mainSourceOfLiving,
+          name,
+          plotNumber,
+          structureLocationZone,
+          ward,
+          // createdBy
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      const { orderData } = await axios.post(
+        '/api/orders/create',
+        {
+          household: householdData._id,
+          orderNumber,
+          willPayFullForOSS,
+          paymentOption,
+          orderStatus,
+          product,
+          isDelivered: false,
+
+          // createdBy
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      
     };
 
 
     const placeOrderHandler = async () => {
       closeSnackbar();
 
-      const areaData = areas.filter( area => area.name === location.area)
-      const wardData = wards.filter( ward => ward.name === location.ward);
+      const areaData = areas.filter( area => area.name === dashboardLocationDetails.area)
+      const wardData = wards.filter( ward => ward.name === dashboardLocationDetails.ward);
 
       const area = areaData[0]
       const ward = wardData[0]
@@ -175,85 +220,80 @@ const PlaceOrder = (props) => {
       const areaId = area._id
       const wardId = ward._id
 
-      const isPoor = householdDetails.isPoor === 'Yes' ? true : false;
+      const isPoor = dashboardHouseholdDetails.registrationPovertyStatus === 'Yes' ? true : false;
       const isVulnerable =
-        householdDetails.isVulnerable === 'Yes' ? true : false;
+      dashboardHouseholdDetails.isVulnerable === 'Yes' ? true : false;
       const blockName = location.blockName;
       const willPayFullForOSS =
         paymentMethod.willPayFullForOSS === 'Yes' ? true : false;
 
       try {
         setLoading(true);
+        
 
-        const householdInput = {
-          ...householdDetails,
-          code: householdCode,
-          blockName,
-          isPoor,
-          isVulnerable,
-          willPayFullForOSS,
-          adminNotes:
-            'This household was registered through the website on ' +
-            new Date().toDateString(),
-          enrollmentStatus: 'Pending',
-          structureLocationZone: location.structureLocationZone,
-          area: areaId,
-          ward: wardId,
-        };
-
-        const { data } = await axios.post(
-          '/api/orders/create',
-          {
-            orderNumber,
-            orderStatus: 'Pending',
-            paymentOption: paymentMethod.paymentOption,
-            willPayFullForOSS,
-          },
-          {
-            headers: {
-              authorization: `Bearer ${userInfo.token}`,
-            },
-          }
-        );
-
-        const orderId = data.order._id
-
-
-        const createOrderItems = () => {
-          cartItems.map(async (item) => {
-            const { data } = await axios.post(
-              '/api/orderItems/create',
-              {
-                product: item._id,
-                quantity: item.quantity,
-                order: orderId,
-              },
-              {
-                headers: {
-                  authorization: `Bearer ${userInfo.token}`,
-                },
-              }
-            );
-          });
-
+        const householdHeadInput = {
+          firstName: dashboardHouseholdHeadDetails.registrationFirstName,
+          lastName: dashboardHouseholdHeadDetails.registrationLastName,
+          email: dashboardHouseholdHeadDetails.registrationEmail,
+          dateOfBirth: dashboardHouseholdHeadDetails.registrationDateOfBirth,
+          nationalID: dashboardHouseholdHeadDetails.registrationNationalID,
+          phone: dashboardHouseholdHeadDetails.registrationPhone,
+          password: dashboardHouseholdHeadDetails.registrationPassword,
         }
 
-        createOrderItems();
+        const householdInput = {
+          adminNotes:
+          'This household was registered through the website on ' +
+          new Date().toDateString(),
+          area: dashboardLocationDetails.registrationArea,
+          avarageMonthlyIncomeRange: dashboardHouseholdDetails.registrationIncomeRange,
+          blockName: dashboardHouseholdDetails.registrationBlockName,
+          code: householdCode,
+          currentLatrineType: dashboardHouseholdDetails.registrationLatrineType,
+          homeOwnershipStatus: dashboardHouseholdDetails.registrationHomeOwnershipStatus,
+          isPoor: dashboardHouseholdDetails.registrationPovertyStatus,
+          isVulnerable: dashboardHouseholdDetails.registrationVulnerabilityStatus,
+          mainSourceOfLiving: dashboardHouseholdDetails.registrationSourceOfLivelihood,
+          name: dashboardHouseholdDetails.registrationHouseholdName,
+          plotNumber: dashboardHouseholdDetails.registrationPlotNumber,
+          structureLocationZone: dashboardLocationDetails.registrationStructureZone,
+          ward: dashboardLocationDetails.registrationWard,
+        };
 
-        const newHouseholdInput = { ...householdInput, order: data.order._id };
+        const orderInput = {
+          orderNumber,
+          willPayFullForOSS: dashboardPaymentDetails.registrationWillPayInFull,
+          paymentOption: dashboardPaymentDetails.registrationPaymentOption,
+          orderStatus: 'Pending',
+          product: dashboardTechnologyChoice.registrationProduct._id,
+        };
 
-        const household = createHousehold(newHouseholdInput);
 
-        dispatch({ type: 'CLEAR_CART' });
-        Cookies.remove('cartItems');
+        // const newHouseholdInput = { ...householdHeadInput, ...householdInput, ...orderInput, createdBy};
+        
+        const newHouseholdInput = { ...householdHeadInput, ...householdInput, ...orderInput};
+
+        createHousehold(newHouseholdInput);
+
+        dispatch({ type: 'CLEAR_DASHBOARD_REGISTRATION_DATA' });
+        Cookies.remove(
+          'dashboardHouseholdHeadDetails',
+          'dashboardHouseholdDetails',
+          'dashboardLocationDetails',
+          'dashboardTechnologyChoice',
+          'dashboardPaymentDetails'
+          );
+
         setLoading(false);
 
-        router.push(`/order/${data.order._id}`);
+        router.push('/dashboard/register');
       } catch (e) {
         setLoading(false);
         enqueueSnackbar(getError(e), { variant: 'error' });
       }
     };
+
+    
 
     return (
       <Layout title='Enroll household'>
@@ -275,23 +315,26 @@ const PlaceOrder = (props) => {
                 </ListItem>
                 <ListItem>
                   <Typography>
-                    <strong>Household name: </strong>
-                    {householdDetails.name}
+                    <strong>Household head: </strong>
+                    {dashboardHouseholdHeadDetails.registrationFirstName + " " + dashboardHouseholdHeadDetails.registrationLastName}
+                    {', '}
+                    <strong>Household phone: </strong>
+                    {dashboardHouseholdHeadDetails.registrationPhone}
                     {', '}
                     <strong>Plot number: </strong>
-                    {householdDetails.plotNumber}
+                    {dashboardHouseholdDetails.registrationPlotNumber}
                     {', '}
                     <strong>Home ownership status: </strong>
-                    {householdDetails.homeOwnershipStatus}
+                    {dashboardHouseholdDetails.registrationHomeOwnershipStatus}
                     {', '}
                     <strong>Current currentLatrineType: </strong>
-                    {householdDetails.currentLatrineType}
+                    {dashboardHouseholdDetails.registrationLatrineType}
                     {', '}
                     <strong>Is Household Poor?: </strong>
-                    {householdDetails.isPoor}
+                    {dashboardHouseholdDetails.registrationPovertyStatus}
                     {', '}
                     <strong>Is Household Vulnerable?: </strong>
-                    {householdDetails.isVulnerable}
+                    {dashboardHouseholdDetails.registrationVulnerabilityStatus}
                   </Typography>
                 </ListItem>
               </List>
@@ -307,16 +350,16 @@ const PlaceOrder = (props) => {
                 <ListItem>
                   <Typography>
                     <strong>Area name: </strong>
-                    {location.area}
+                    {dashboardLocationDetails.registrationArea}
                     {', '}
                     <strong>Block name: </strong>
-                    {location.blockName}
+                    {dashboardHouseholdDetails.registrationBlockName}
                     {', '}
                     <strong>Ward name: </strong>
-                    {location.ward}
+                    {dashboardLocationDetails.registrationWard}
                     {', '}
                     <strong>Structure location zone: </strong>
-                    {location.structureLocationZone}
+                    {dashboardLocationDetails.registrationStructureZone}
                   </Typography>
                 </ListItem>
               </List>
@@ -332,12 +375,12 @@ const PlaceOrder = (props) => {
                 <ListItem>
                   <Typography>
                     <strong>Payment Option: </strong>
-                    {paymentMethod.paymentOption}
+                    {dashboardPaymentDetails.registrationPaymentOption}
                     {', '}
                     <strong>
                       Can household afford to pay in full for OSS?:{' '}
                     </strong>
-                    {paymentMethod.willPayFullForOSS}
+                    {dashboardPaymentDetails.registrationWillPayInFull}
                   </Typography>
                 </ListItem>
               </List>
@@ -358,40 +401,34 @@ const PlaceOrder = (props) => {
                         <TableRow>
                           <TableCell>Image</TableCell>
                           <TableCell>Name</TableCell>
-                          <TableCell align='right'>Quantity</TableCell>
                           <TableCell align='right'>Price</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {cartItems.map((item) => (
-                          <TableRow key={item._id}>
-                            <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
-                                <Link>
-                                  <Image
-                                    src={item.image}
-                                    alt={item.name}
-                                    width={50}
-                                    height={50}
-                                  ></Image>
-                                </Link>
-                              </NextLink>
-                            </TableCell>
-                            <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
-                                <Link>
-                                  <Typography>{item.name}</Typography>
-                                </Link>
-                              </NextLink>
-                            </TableCell>
-                            <TableCell align='right'>
-                              <Typography>{item.quantity}</Typography>
-                            </TableCell>
-                            <TableCell align='right'>
-                              <Typography>MWK{item.price}</Typography>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        <TableRow key={technologyOfChoice._id}>
+                          <TableCell>
+                            <NextLink href={`/product/${technologyOfChoice.slug}`} passHref>
+                              <Link>
+                                <Image
+                                  src={technologyOfChoice.image}
+                                  alt={technologyOfChoice.name}
+                                  width={50}
+                                  height={50}
+                                ></Image>
+                              </Link>
+                            </NextLink>
+                          </TableCell>
+                          <TableCell>
+                            <NextLink href={`/product/${technologyOfChoice.slug}`} passHref>
+                              <Link>
+                                <Typography>{technologyOfChoice.name}</Typography>
+                              </Link>
+                            </NextLink>
+                          </TableCell>
+                          <TableCell align='right'>
+                            <Typography>MWK{technologyOfChoice.price}</Typography>
+                          </TableCell>
+                        </TableRow>
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -411,10 +448,10 @@ const PlaceOrder = (props) => {
                 <ListItem>
                   <Grid container>
                     <Grid item xs={6}>
-                      <Typography>Items:</Typography>
+                      <Typography>Item:</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                      <Typography align='right'>MWK{itemsPrice}</Typography>
+                      <Typography align='right'>MWK{technologyOfChoice.price}</Typography>
                     </Grid>
                   </Grid>
                 </ListItem>
@@ -427,7 +464,7 @@ const PlaceOrder = (props) => {
                     </Grid>
                     <Grid item xs={6}>
                       <Typography align='right'>
-                        <strong>MWK{itemsPrice}</strong>
+                        <strong>MWK{technologyOfChoice.price}</strong>
                       </Typography>
                     </Grid>
                   </Grid>
@@ -448,6 +485,22 @@ const PlaceOrder = (props) => {
                   </ListItem>
                 )}
               </List>
+              <ListItem>
+                  <Button
+                    type='button'
+                    variant='contained'
+                    color='secondary'
+                    fullWidth
+                    onClick={() => router.push('/dashboard/register')}
+                  >
+                    Back
+                  </Button>
+                  </ListItem>
+                  <ListItem>
+                  <Button ariant='outline' fullWidth >
+                    Cancel registration
+                  </Button>
+                  </ListItem>
             </Card>
           </Grid>
         </Grid>
